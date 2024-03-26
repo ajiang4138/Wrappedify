@@ -1,9 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Wrappedify" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Theme.Wrappedify" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/spotify_green</item>
+        <item name="materialButtonStyle">@style/Widget.Wrappedify.Button</item>
+        <item name="android:textColor">@color/spotify_black</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/circular</item>
+
     </style>
 
-    <style name="Theme.Wrappedify" parent="Base.Theme.Wrappedify" />
+    <style name="Widget.Wrappedify.Button" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/spotify_green</item>
+        <item name="android:textColor">@color/spotify_black</item>
+    </style>
+
+<!--    <style name="Theme.Wrappedify" parent="Base.Theme.Wrappedify" />-->
+
 </resources>
