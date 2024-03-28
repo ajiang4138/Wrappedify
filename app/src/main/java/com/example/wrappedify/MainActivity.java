@@ -13,10 +13,12 @@ import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private String mAccessToken, mAccessCode;
     private Call mCall;
 
-    private TextView tokenTextView, codeTextView, profileTextView;
+    private TextView tokenTextView, codeTextView, profileTextView, mediumTermTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +49,13 @@ public class MainActivity extends AppCompatActivity {
         tokenTextView = (TextView) findViewById(R.id.token_text_view);
         codeTextView = (TextView) findViewById(R.id.code_text_view);
         profileTextView = (TextView) findViewById(R.id.response_text_view);
+        mediumTermTextView = (TextView) findViewById(R.id.medium_text_view);
 
         // Initialize the buttons
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
         Button codeBtn = (Button) findViewById(R.id.code_btn);
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
+        Button mediumBtn = (Button) findViewById(R.id.medium_term_btn);
 
         // Set the click listeners for the buttons
 
@@ -65,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
 
         profileBtn.setOnClickListener((v) -> {
             onGetUserProfileClicked();
+        });
+
+        mediumBtn.setOnClickListener((v) -> {
+            getMediumTermTop();
         });
 
     }
@@ -153,6 +161,67 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void getMediumTermTop() {
+        if (mAccessToken == null) {
+            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // get request
+        final Request request = new Request.Builder()
+                .url("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=10&offset=0")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(MainActivity.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+
+                    JSONArray jsonItems = jsonObject.getJSONArray("items");
+                    int length = jsonItems.length();
+
+                    ArrayList<String> names = new ArrayList<>();
+                    ArrayList<String[]> genres = new ArrayList<>();
+
+                    for (int i = 0; i < length; i++) {
+                        JSONObject artistInfo = jsonItems.getJSONObject(i);
+                        String name = artistInfo.getString("name");
+
+                        JSONArray genreList = artistInfo.getJSONArray("genres");
+                        String[] genre = new String[genreList.length()];
+                        for (int j = 0; j < genreList.length(); j++) {
+                            genre[j] = genreList.getString(j);
+                        }
+
+                        names.add(name);
+                        genres.add(genre);
+                    }
+
+                    String output = names + "\n" + genres;
+
+                    setTextAsync("Response Object: " + output, mediumTermTextView);
+
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     /**
      * Creates a UI thread to update a TextView in the background
      * Reduces UI latency and makes the system perform more consistently
@@ -173,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(new String[] { "user-read-email" }) // <--- Change the scope of your requested token here
+                .setScopes(new String[] { "user-read-email", "user-top-read" }) // <--- Change the scope of your requested token here
                 .setCampaign("your-campaign-token")
                 .build();
     }
