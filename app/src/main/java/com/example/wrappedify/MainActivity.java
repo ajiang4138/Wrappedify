@@ -152,14 +152,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    final JSONObject jsonObject = new JSONObject(response.body().string());
-                    setTextAsync(jsonObject.toString(3), profileTextView);
-                } catch (JSONException e) {
-                    Log.d("JSON", "Failed to parse data: " + e);
-                    Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
-                            Toast.LENGTH_SHORT).show();
-                }
+
+                // final JSONObject jsonObject = new JSONObject(response.body().string());
+                setTextAsync(response.body().string(), profileTextView);
+
             }
         });
     }
@@ -236,8 +232,12 @@ public class MainActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
-                    Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
-                            Toast.LENGTH_SHORT).show();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });
