@@ -65,7 +65,7 @@
             android:id="@+id/medium_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
+            android:textSize="18sp"
             tools:text="Line 1\nLine 2\nLine 3" />
 
         <LinearLayout

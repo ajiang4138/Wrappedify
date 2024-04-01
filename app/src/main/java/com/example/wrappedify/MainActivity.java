@@ -19,6 +19,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -192,8 +195,9 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray jsonItems = jsonObject.getJSONArray("items");
                     int length = jsonItems.length();
 
+                    String output = "";
                     ArrayList<String> names = new ArrayList<>();
-                    ArrayList<String[]> genres = new ArrayList<>();
+                    ArrayList<String> genres = new ArrayList<>();
 
                     for (int i = 0; i < length; i++) {
                         JSONObject artistInfo = jsonItems.getJSONObject(i);
@@ -206,12 +210,29 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         names.add(name);
-                        genres.add(genre);
+                        genres.addAll(Arrays.asList(genre));
+
+                        output += "Artist " + (i + 1) + ": " + name + " Genres: " + Arrays.toString(genre) + "\n";
                     }
 
-                    String output = names + "\n" + genres;
+                    HashMap<String, Integer> frequencyMap = new HashMap<>();
+                    for (String str : genres) {
+                        frequencyMap.put(str, frequencyMap.getOrDefault(str, 0) + 1);
+                    }
 
-                    setTextAsync("Response Object: " + output, mediumTermTextView);
+                    String mostOccurring = null;
+                    int maxFrequency = 0;
+
+                    for (Map.Entry<String, Integer> entry : frequencyMap.entrySet()) {
+                        if (entry.getValue() > maxFrequency) {
+                            mostOccurring = entry.getKey();
+                            maxFrequency = entry.getValue();
+                        }
+                    }
+
+                    output += "Most commonly listened to genre: " + mostOccurring;
+
+                    setTextAsync(output, mediumTermTextView);
 
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
