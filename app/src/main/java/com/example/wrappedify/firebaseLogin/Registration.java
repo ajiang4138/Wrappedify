@@ -111,7 +111,7 @@ public class Registration extends AppCompatActivity {
                     return;
                 }
 
-                mAuth.signInWithEmailAndPassword(email, password)
+                mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -119,10 +119,10 @@ public class Registration extends AppCompatActivity {
 
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
-                                    Toast.makeText(Registration.this, "Login Success.",
+                                    Toast.makeText(Registration.this, "Account Created.",
                                             Toast.LENGTH_SHORT).show();
 
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), Login.class);
                                     startActivity(intent);
                                     finish();
 
