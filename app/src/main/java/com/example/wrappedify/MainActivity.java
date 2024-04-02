@@ -240,17 +240,27 @@ public class MainActivity extends AppCompatActivity {
                         frequencyMap.put(str, frequencyMap.getOrDefault(str, 0) + 1);
                     }
 
-                    String mostOccurring = null;
-                    int maxFrequency = 0;
+                    int j = 0;
+                    ArrayList<String> mode = new ArrayList<>();
 
-                    for (Map.Entry<String, Integer> entry : frequencyMap.entrySet()) {
-                        if (entry.getValue() > maxFrequency) {
-                            mostOccurring = entry.getKey();
-                            maxFrequency = entry.getValue();
+                    while (j < 3) {
+                        String mostOccurring = null;
+                        int maxFrequency = 0;
+
+                        for (Map.Entry<String, Integer> entry : frequencyMap.entrySet()) {
+                            if (entry.getValue() > maxFrequency) {
+                                mostOccurring = entry.getKey();
+                                maxFrequency = entry.getValue();
+                            }
                         }
+
+                        mode.add(mostOccurring);
+                        frequencyMap.remove(mostOccurring);
+                        j++;
                     }
 
-                    output += "Most commonly listened to genre: " + mostOccurring;
+
+                    output += "Most commonly listened to genre: " + mode;
 
                     setTextAsync(output, mediumTermTextView);
 
