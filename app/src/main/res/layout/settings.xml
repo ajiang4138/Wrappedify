@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/primary">
+    android:background="@color/primary"
+    tools:context=".Settings">
     
     <RelativeLayout
         android:layout_width="match_parent"
@@ -43,24 +46,17 @@
                 android:layout_marginTop="10dp"
                 android:src="@drawable/profile_icon"/>
             <TextView
+                android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:text="Wesley Jeong"
                 android:textColor="#FFFFFF"
                 android:textSize="22sp"
                 android:textStyle="bold"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+123456789"
-                android:textColor="#CCFFFFFF"
-                android:textSize="12sp"
-                android:layout_gravity="center"/>
-
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/editProfileBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -106,6 +102,7 @@
                         android:layout_toEndOf="@id/nightModeIcon"/>
                     
                     <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/nightModeSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
