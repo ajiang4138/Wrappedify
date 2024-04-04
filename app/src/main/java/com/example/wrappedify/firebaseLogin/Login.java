@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.wrappedify.MainActivity;
 import com.example.wrappedify.R;
+import com.example.wrappedify.dashboard;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -37,7 +38,7 @@ public class Login extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), dashboard.class);
             startActivity(intent);
             finish();
         }
@@ -103,7 +104,7 @@ public class Login extends AppCompatActivity {
                                     Toast.makeText(Login.this, "Login Success.",
                                             Toast.LENGTH_SHORT).show();
 
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), dashboard.class);
                                     startActivity(intent);
                                     finish();
 

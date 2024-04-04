@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
         Button mediumBtn = (Button) findViewById(R.id.medium_term_btn);
         Button logoutBtn = (Button) findViewById(R.id.logoutBtn);
+        Button dashboardBtn = findViewById(R.id.dashboardBtn);
 
         // Set the click listeners for the buttons
 
@@ -99,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
+            finish();
+        });
+
+        dashboardBtn.setOnClickListener((v) -> {
             finish();
         });
 
