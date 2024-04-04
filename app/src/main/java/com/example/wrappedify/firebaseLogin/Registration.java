@@ -43,7 +43,7 @@ import com.example.wrappedify.R;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class Registration extends AppCompatActivity {
-    TextInputEditText editTextEmail, editTextPassword;
+    TextInputEditText editTextEmail, editTextPassword, editConfirmPassword;
     Button registerBtn;
     ProgressBar progressBar;
     TextView textView;
@@ -71,6 +71,8 @@ public class Registration extends AppCompatActivity {
 
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
+        editConfirmPassword = findViewById(R.id.confirm_password);
+
         registerBtn = findViewById(R.id.register_btn);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.loginText);
@@ -85,9 +87,10 @@ public class Registration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                String email, password;
+                String email, password, confirmPassword;
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
+                confirmPassword = String.valueOf(editConfirmPassword.getText());
 
                 if (TextUtils.isEmpty(email)) {
                     runOnUiThread(new Runnable() {
@@ -107,6 +110,14 @@ public class Registration extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
+                    progressBar.setVisibility(View.GONE);
+                    return;
+                }
+
+                if (!(password.equals(confirmPassword))) {
+                    Toast.makeText(Registration.this, "Password does not match.",
+                            Toast.LENGTH_SHORT).show();
+
                     progressBar.setVisibility(View.GONE);
                     return;
                 }

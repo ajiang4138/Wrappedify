@@ -2,6 +2,7 @@ package com.example.wrappedify;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -27,11 +28,16 @@ public class Settings extends AppCompatActivity {
         TextView username = (TextView) findViewById(R.id.username);
         Button editProfileBtn = (Button) findViewById(R.id.editProfileBtn);
         SwitchCompat nightToggle = (SwitchCompat) findViewById(R.id.nightModeSwitch);
+        ImageView backBtn = (ImageView) findViewById(R.id.backBtn);
 
         username.setText(user.getEmail());
 
         editProfileBtn.setOnClickListener((v) -> {
             goEditProfile();
+        });
+
+        backBtn.setOnClickListener((v) -> {
+            finish();
         });
 
 

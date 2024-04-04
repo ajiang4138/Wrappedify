@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wrappedify.Callbacks.TracksCallback;
 import com.example.wrappedify.firebaseLogin.Login;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,12 +21,15 @@ import com.spotify.sdk.android.auth.AuthorizationResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private String mAccessToken, mAccessCode;
     private Call mCall;
 
-    private TextView tokenTextView, codeTextView, profileTextView, mediumTermTextView;
+    private TextView tokenTextView, codeTextView, profileTextView, mediumTermTextView, mediumTracksTextView;
 
     FirebaseAuth mAuth;
     FirebaseUser user;
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         codeTextView = (TextView) findViewById(R.id.code_text_view);
         profileTextView = (TextView) findViewById(R.id.response_text_view);
         mediumTermTextView = (TextView) findViewById(R.id.medium_text_view);
+        mediumTracksTextView = (TextView) findViewById(R.id.mediumTracks_text_view);
 
         // Initialize the buttons
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
@@ -77,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         Button mediumBtn = (Button) findViewById(R.id.medium_term_btn);
         Button logoutBtn = (Button) findViewById(R.id.logoutBtn);
         Button settingsBtn = (Button) findViewById(R.id.settingsBtn);
+        Button mediumTracksBtn = (Button) findViewById(R.id.medium_tracks_btn);
 
         // Set the click listeners for the buttons
 
@@ -93,7 +99,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mediumBtn.setOnClickListener((v) -> {
-            getMediumTermTop();
+            getMediumTopArtist();
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            getMediumTopTracks();
+        });
+
+        mediumTracksBtn.setOnClickListener((v) -> {
+            getMediumTopTracks();
         });
 
         logoutBtn.setOnClickListener((v) -> {
@@ -106,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
         settingsBtn.setOnClickListener((v) -> {
             Intent intent = new Intent(getApplicationContext(), Settings.class);
             startActivity(intent);
-            finish();
         });
 
     }
@@ -191,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void getMediumTermTop() {
+    public void getMediumTopArtist() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -199,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
         // get request
         final Request request = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=10&offset=0")
+                .url("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=5&offset=0")
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
@@ -266,8 +283,7 @@ public class MainActivity extends AppCompatActivity {
                         j++;
                     }
 
-
-                    output += "Most commonly listened to genre: " + mode;
+                    output += "Most commonly listened to genre: " + mode + "\n";
 
                     setTextAsync(output, mediumTermTextView);
 
@@ -283,6 +299,64 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void getMediumTopTracks() {
+        if (mAccessToken == null) {
+            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // get request
+        final Request request = new Request.Builder()
+                .url("https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=5&offset=0")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(MainActivity.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    JSONArray jsonItems = jsonObject.getJSONArray("items");
+                    int length = jsonItems.length();
+
+                    String output = "";
+                    ArrayList<String> names = new ArrayList<>();
+
+                    for (int i = 0; i < length; i++) {
+                        JSONObject trackInfo = jsonItems.getJSONObject(i);
+                        String name = trackInfo.getString("name");
+
+                        names.add(name + "\n");
+                    }
+
+                    output += "Tracks: " + names;
+
+                    setTextAsync(output, mediumTracksTextView);
+
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
 
     /**
      * Creates a UI thread to update a TextView in the background
