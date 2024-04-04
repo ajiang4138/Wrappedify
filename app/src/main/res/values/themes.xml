@@ -15,19 +15,19 @@
     </style>
 
     <style name="nightModeSwitch" parent="Theme.AppCompat.Light">
-        <item name="colorControlActivated">@color/night_mode</item>
+        <item name="colorControlActivated">@color/spotify_green</item>
         <item name="colorSwitchThumbNormal">#FFFFFF</item>
         <item name="android:colorForeground">#99FFFFFF</item>
     </style>
 
     <style name="notificationSwitch" parent="Theme.AppCompat.Light">
-        <item name="colorControlActivated">@color/notifications</item>
+        <item name="colorControlActivated">@color/spotify_green</item>
         <item name="colorSwitchThumbNormal">#FFFFFF</item>
         <item name="android:colorForeground">#99FFFFFF</item>
     </style>
 
     <style name="privateAccountSwitch" parent="Theme.AppCompat.Light">
-        <item name="colorControlActivated">@color/notifications</item>
+        <item name="colorControlActivated">@color/spotify_green</item>
         <item name="colorSwitchThumbNormal">#FFFFFF</item>
         <item name="android:colorForeground">#99FFFFFF</item>
     </style>

@@ -24,21 +24,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Request Token" />
-
-        <TextView
-            android:id="@+id/code_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            tools:text="Code:" />
+            android:text="Link Account" />
 
         <Button
-            android:id="@+id/code_btn"
+            android:id="@+id/unlink_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Request Code" />
+            android:text="Unlink Account" />
 
         <TextView
             android:id="@+id/response_text_view"
@@ -61,8 +54,21 @@
                 android:text="Get User Profile" />
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/artistImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
         <TextView
             android:id="@+id/medium_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            tools:text="Line 1\nLine 2\nLine 3" />
+
+        <TextView
+            android:id="@+id/mediumTracks_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
@@ -73,6 +79,15 @@
             android:layout_height="wrap_content">
 
             <Button
+                android:id="@+id/short_term_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:text="Get Short Term" />
+
+            <Button
                 android:id="@+id/medium_term_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -80,13 +95,39 @@
                 android:layout_margin="8dp"
                 android:layout_weight="1"
                 android:text="Get Medium Term" />
+
+
+            <Button
+                android:id="@+id/long_term_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:text="Get Long Term" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/logoutBtn"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Logout" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/logoutBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:layout_margin="5dp"/>
+
+            <Button
+                android:id="@+id/settingsBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Settings"
+                android:layout_margin="5dp"/>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/dashboardBtn"
@@ -94,5 +135,21 @@
             android:layout_height="wrap_content"
             android:text="Dashboard" />
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/generateFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_add_24"
+        app:backgroundTint="@color/spotify_green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
