@@ -1,11 +1,16 @@
 package com.example.wrappedify;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +29,9 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView tokenTextView, codeTextView, profileTextView, mediumTermTextView, mediumTracksTextView;
 
+    private ImageView artistPict;
+
     FirebaseAuth mAuth;
     FirebaseUser user;
 
@@ -69,19 +79,22 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the views
         tokenTextView = findViewById(R.id.token_text_view);
-        codeTextView = findViewById(R.id.code_text_view);
         profileTextView = findViewById(R.id.response_text_view);
         mediumTermTextView = findViewById(R.id.medium_text_view);
         mediumTracksTextView = findViewById(R.id.mediumTracks_text_view);
 
+        artistPict = findViewById(R.id.artistImage);
+
         // Initialize the buttons
         Button tokenBtn = findViewById(R.id.token_btn);
-        Button codeBtn = findViewById(R.id.code_btn);
         Button profileBtn = findViewById(R.id.profile_btn);
+
+        Button shortBtn = findViewById(R.id.short_term_btn);
         Button mediumBtn = findViewById(R.id.medium_term_btn);
+        Button longBtn = findViewById(R.id.long_term_btn);
+
         Button logoutBtn = findViewById(R.id.logoutBtn);
         Button settingsBtn = findViewById(R.id.settingsBtn);
-        Button mediumTracksBtn = findViewById(R.id.medium_tracks_btn);
 
         // Set the click listeners for the buttons
 
@@ -89,12 +102,20 @@ public class MainActivity extends AppCompatActivity {
             getToken();
         });
 
-        codeBtn.setOnClickListener((v) -> {
-            getCode();
-        });
-
         profileBtn.setOnClickListener((v) -> {
             onGetUserProfileClicked();
+        });
+
+        shortBtn.setOnClickListener((v) -> {
+            getShortTopArtist();
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            getShortTopTracks();
         });
 
         mediumBtn.setOnClickListener((v) -> {
@@ -109,8 +130,16 @@ public class MainActivity extends AppCompatActivity {
             getMediumTopTracks();
         });
 
-        mediumTracksBtn.setOnClickListener((v) -> {
-            getMediumTopTracks();
+        longBtn.setOnClickListener((v) -> {
+            getLongTopArtist();
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            getLongTopTracks();
         });
 
         logoutBtn.setOnClickListener((v) -> {
@@ -207,7 +236,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void getMediumTopArtist() {
+    /**
+     * Get top 5 recently listened to artists, by short term.
+     */
+    public void getShortTopArtist() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -215,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
 
         // get request
         final Request request = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=5&offset=0")
+                .url("https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5&offset=0")
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
@@ -241,6 +273,23 @@ public class MainActivity extends AppCompatActivity {
                     String output = "";
                     ArrayList<String> names = new ArrayList<>();
                     ArrayList<String> genres = new ArrayList<>();
+
+                    JSONObject topArtist = jsonItems.getJSONObject(0);
+                    JSONArray artistImages = topArtist.getJSONArray("images");
+                    JSONObject artistImage = artistImages.getJSONObject(0);
+                    String imageURL = artistImage.getString("url");
+
+                    Handler uiHandler = new Handler(Looper.getMainLooper());
+                    uiHandler.post(new Runnable(){
+                        @Override
+                        public void run() {
+                            Picasso.get()
+                                    .load(imageURL)
+                                    .resize(300, 300)
+                                    .centerCrop()
+                                    .into(artistPict);
+                        }
+                    });
 
                     for (int i = 0; i < length; i++) {
                         JSONObject artistInfo = jsonItems.getJSONObject(i);
@@ -299,6 +348,192 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Get top 5 recently listened to tracks, by short term
+     */
+    public void getShortTopTracks() {
+        if (mAccessToken == null) {
+            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // get request
+        final Request request = new Request.Builder()
+                .url("https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=5&offset=0")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(MainActivity.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    JSONArray jsonItems = jsonObject.getJSONArray("items");
+                    int length = jsonItems.length();
+
+                    String output = "";
+                    ArrayList<String> names = new ArrayList<>();
+                    ArrayList<String> artistNames = new ArrayList<>();
+
+                    for (int i = 0; i < length; i++) {
+                        JSONObject trackInfo = jsonItems.getJSONObject(i);
+                        JSONObject albumInfo = trackInfo.getJSONObject("album");
+                        JSONArray artistInfo = albumInfo.getJSONArray("artists");
+                        int artistInfoLength = artistInfo.length();
+
+                        for (int j = 0; j < artistInfoLength; j++) {
+                            JSONObject artist = artistInfo.getJSONObject(j);
+                            artistNames.add(artist.getString("name"));
+                        }
+
+                        String name = trackInfo.getString("name");
+
+
+                        names.add(name + " by " + artistNames + "\n\n");
+                    }
+
+                    output += "Tracks\n " + names;
+
+                    setTextAsync(output, mediumTracksTextView);
+
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * Get top 5 recently listened to artists, by medium term.
+     */
+    public void getMediumTopArtist() {
+        if (mAccessToken == null) {
+            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // get request
+        final Request request = new Request.Builder()
+                .url("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=5&offset=0")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(MainActivity.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+
+                    JSONArray jsonItems = jsonObject.getJSONArray("items");
+                    int length = jsonItems.length();
+
+                    String output = "";
+                    ArrayList<String> names = new ArrayList<>();
+                    ArrayList<String> genres = new ArrayList<>();
+
+                    JSONObject topArtist = jsonItems.getJSONObject(0);
+                    JSONArray artistImages = topArtist.getJSONArray("images");
+                    JSONObject artistImage = artistImages.getJSONObject(0);
+                    String imageURL = artistImage.getString("url");
+
+                    Handler uiHandler = new Handler(Looper.getMainLooper());
+                    uiHandler.post(new Runnable(){
+                        @Override
+                        public void run() {
+                            Picasso.get()
+                                    .load(imageURL)
+                                    .resize(300, 300)
+                                    .centerCrop()
+                                    .into(artistPict);
+                        }
+                    });
+
+                    for (int i = 0; i < length; i++) {
+                        JSONObject artistInfo = jsonItems.getJSONObject(i);
+                        String name = artistInfo.getString("name");
+
+                        JSONArray genreList = artistInfo.getJSONArray("genres");
+                        String[] genre = new String[genreList.length()];
+                        for (int j = 0; j < genreList.length(); j++) {
+                            genre[j] = genreList.getString(j);
+                        }
+
+                        names.add(name);
+                        genres.addAll(Arrays.asList(genre));
+
+                        output += "Artist " + (i + 1) + ": " + name + " Genres: " + Arrays.toString(genre) + "\n";
+                    }
+
+                    HashMap<String, Integer> frequencyMap = new HashMap<>();
+                    for (String str : genres) {
+                        frequencyMap.put(str, frequencyMap.getOrDefault(str, 0) + 1);
+                    }
+
+                    int j = 0;
+                    ArrayList<String> mode = new ArrayList<>();
+
+                    while (j < 3) {
+                        String mostOccurring = null;
+                        int maxFrequency = 0;
+
+                        for (Map.Entry<String, Integer> entry : frequencyMap.entrySet()) {
+                            if (entry.getValue() > maxFrequency) {
+                                mostOccurring = entry.getKey();
+                                maxFrequency = entry.getValue();
+                            }
+                        }
+
+                        mode.add(mostOccurring);
+                        frequencyMap.remove(mostOccurring);
+                        j++;
+                    }
+
+                    output += "Most commonly listened to genre: " + mode + "\n";
+
+                    setTextAsync(output, mediumTermTextView);
+
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * Get top 5 recently listened to artists, by medium term.
+     */
     public void getMediumTopTracks() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
@@ -367,6 +602,201 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Get top 5 recently listened to artists, by long term.
+     */
+    public void getLongTopArtist() {
+        if (mAccessToken == null) {
+            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // get request
+        final Request request = new Request.Builder()
+                .url("https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=5&offset=0")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(MainActivity.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+
+                    JSONArray jsonItems = jsonObject.getJSONArray("items");
+                    int length = jsonItems.length();
+
+                    String output = "";
+                    ArrayList<String> names = new ArrayList<>();
+                    ArrayList<String> genres = new ArrayList<>();
+
+                    JSONObject topArtist = jsonItems.getJSONObject(0);
+                    JSONArray artistImages = topArtist.getJSONArray("images");
+                    JSONObject artistImage = artistImages.getJSONObject(0);
+                    String imageURL = artistImage.getString("url");
+
+                    Handler uiHandler = new Handler(Looper.getMainLooper());
+                    uiHandler.post(new Runnable(){
+                        @Override
+                        public void run() {
+                            Picasso.get()
+                                    .load(imageURL)
+                                    .resize(300, 300)
+                                    .centerCrop()
+                                    .into(artistPict);
+                        }
+                    });
+
+                    for (int i = 0; i < length; i++) {
+                        JSONObject artistInfo = jsonItems.getJSONObject(i);
+                        String name = artistInfo.getString("name");
+
+                        JSONArray genreList = artistInfo.getJSONArray("genres");
+                        String[] genre = new String[genreList.length()];
+                        for (int j = 0; j < genreList.length(); j++) {
+                            genre[j] = genreList.getString(j);
+                        }
+
+                        names.add(name);
+                        genres.addAll(Arrays.asList(genre));
+
+                        output += "Artist " + (i + 1) + ": " + name + " Genres: " + Arrays.toString(genre) + "\n";
+                    }
+
+                    HashMap<String, Integer> frequencyMap = new HashMap<>();
+                    for (String str : genres) {
+                        frequencyMap.put(str, frequencyMap.getOrDefault(str, 0) + 1);
+                    }
+
+                    int j = 0;
+                    ArrayList<String> mode = new ArrayList<>();
+
+                    while (j < 3) {
+                        String mostOccurring = null;
+                        int maxFrequency = 0;
+
+                        for (Map.Entry<String, Integer> entry : frequencyMap.entrySet()) {
+                            if (entry.getValue() > maxFrequency) {
+                                mostOccurring = entry.getKey();
+                                maxFrequency = entry.getValue();
+                            }
+                        }
+
+                        mode.add(mostOccurring);
+                        frequencyMap.remove(mostOccurring);
+                        j++;
+                    }
+
+                    output += "Most commonly listened to genre: " + mode + "\n";
+
+                    setTextAsync(output, mediumTermTextView);
+
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * Get top 5 recently listened to tracks, by long term
+     */
+    public void getLongTopTracks() {
+        if (mAccessToken == null) {
+            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // get request
+        final Request request = new Request.Builder()
+                .url("https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=5&offset=0")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(MainActivity.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    JSONArray jsonItems = jsonObject.getJSONArray("items");
+                    int length = jsonItems.length();
+
+                    String output = "";
+                    ArrayList<String> names = new ArrayList<>();
+                    ArrayList<String> artistNames = new ArrayList<>();
+
+                    for (int i = 0; i < length; i++) {
+                        JSONObject trackInfo = jsonItems.getJSONObject(i);
+                        JSONObject albumInfo = trackInfo.getJSONObject("album");
+                        JSONArray artistInfo = albumInfo.getJSONArray("artists");
+                        int artistInfoLength = artistInfo.length();
+
+                        for (int j = 0; j < artistInfoLength; j++) {
+                            JSONObject artist = artistInfo.getJSONObject(j);
+                            artistNames.add(artist.getString("name"));
+                        }
+
+                        String name = trackInfo.getString("name");
+
+
+                        names.add(name + " by " + artistNames + "\n\n");
+                    }
+
+                    output += "Tracks\n " + names;
+
+                    setTextAsync(output, mediumTracksTextView);
+
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * Create a drawable from URL
+     */
+    public static Drawable LoadImageFromWebOperations(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     /**
      * Creates a UI thread to update a TextView in the background
@@ -377,6 +807,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setTextAsync(final String text, TextView textView) {
         runOnUiThread(() -> textView.setText(text));
+    }
+
+    private void setImageAsync(final Drawable image, ImageView imageView) {
+        runOnUiThread(() -> imageView.setImageDrawable(image));
     }
 
     /**
