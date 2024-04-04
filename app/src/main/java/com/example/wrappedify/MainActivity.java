@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         myWebView.setVisibility(View.GONE);
 
         // Initialize the buttons
+
         Button tokenBtn = findViewById(R.id.token_btn);
         Button profileBtn = findViewById(R.id.profile_btn);
 
@@ -101,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button logoutBtn = findViewById(R.id.logoutBtn);
         Button settingsBtn = findViewById(R.id.settingsBtn);
+        
+        Button dashboardBtn = findViewById(R.id.dashboardBtn);
+
 
         // Set the click listeners for the buttons
 
@@ -162,6 +166,10 @@ public class MainActivity extends AppCompatActivity {
         settingsBtn.setOnClickListener((v) -> {
             Intent intent = new Intent(getApplicationContext(), Settings.class);
             startActivity(intent);
+        });
+
+        dashboardBtn.setOnClickListener((v) -> {
+            finish();
         });
 
     }
