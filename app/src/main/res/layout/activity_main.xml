@@ -24,7 +24,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Request Token" />
+            android:text="Link Account" />
+
+        <Button
+            android:id="@+id/unlink_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Unlink Account" />
 
         <TextView
             android:id="@+id/response_text_view"
@@ -132,6 +139,12 @@
         app:backgroundTint="@color/spotify_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

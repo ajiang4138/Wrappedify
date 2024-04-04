@@ -9,13 +9,14 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wrappedify.firebaseLogin.Login;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.spotify.sdk.android.auth.AuthorizationClient;
@@ -30,12 +31,9 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -47,6 +45,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     public static final String CLIENT_ID = "ccb7c7bbeb9d455e96a4fbaac95885f1";
+    public static final String CLIENT_SECRET = "6daf73f2aea74601bd4925a1d1430294";
     public static final String REDIRECT_URI = "wrappedify://auth";
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
@@ -59,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView tokenTextView, codeTextView, profileTextView, mediumTermTextView, mediumTracksTextView;
 
     private ImageView artistPict;
+
+    private WebView myWebView;
 
     FirebaseAuth mAuth;
     FirebaseUser user;
@@ -85,9 +86,14 @@ public class MainActivity extends AppCompatActivity {
 
         artistPict = findViewById(R.id.artistImage);
 
+        myWebView = (WebView) findViewById(R.id.webview);
+        myWebView.setVisibility(View.GONE);
+
         // Initialize the buttons
         Button tokenBtn = findViewById(R.id.token_btn);
         Button profileBtn = findViewById(R.id.profile_btn);
+
+        Button unlinkBtn = findViewById(R.id.unlink_btn);
 
         Button shortBtn = findViewById(R.id.short_term_btn);
         Button mediumBtn = findViewById(R.id.medium_term_btn);
@@ -104,6 +110,10 @@ public class MainActivity extends AppCompatActivity {
 
         profileBtn.setOnClickListener((v) -> {
             onGetUserProfileClicked();
+        });
+
+        unlinkBtn.setOnClickListener((v) -> {
+            unlinkAccount();
         });
 
         shortBtn.setOnClickListener((v) -> {
@@ -199,6 +209,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void unlinkAccount() {
+        mAccessToken = null;
+        myWebView.setVisibility(View.VISIBLE);
+        myWebView.loadUrl("https://www.spotify.com/us/logout");
+
+        setTextAsync(" ", tokenTextView);
+
+        Toast.makeText(this, "Account Unlinked!", Toast.LENGTH_SHORT).show();
+        myWebView.setVisibility(View.GONE);
+    }
+
     /**
      * Get user profile
      * This method will get the user profile using the token
@@ -228,8 +249,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
-                // final JSONObject jsonObject = new JSONObject(response.body().string());
                 setTextAsync(response.body().string(), profileTextView);
 
             }
@@ -279,6 +298,9 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject artistImage = artistImages.getJSONObject(0);
                     String imageURL = artistImage.getString("url");
 
+                    /**
+                     * Setting image
+                     */
                     Handler uiHandler = new Handler(Looper.getMainLooper());
                     uiHandler.post(new Runnable(){
                         @Override
@@ -307,29 +329,7 @@ public class MainActivity extends AppCompatActivity {
                         output += "Artist " + (i + 1) + ": " + name + " Genres: " + Arrays.toString(genre) + "\n";
                     }
 
-                    HashMap<String, Integer> frequencyMap = new HashMap<>();
-                    for (String str : genres) {
-                        frequencyMap.put(str, frequencyMap.getOrDefault(str, 0) + 1);
-                    }
-
-                    int j = 0;
-                    ArrayList<String> mode = new ArrayList<>();
-
-                    while (j < 3) {
-                        String mostOccurring = null;
-                        int maxFrequency = 0;
-
-                        for (Map.Entry<String, Integer> entry : frequencyMap.entrySet()) {
-                            if (entry.getValue() > maxFrequency) {
-                                mostOccurring = entry.getKey();
-                                maxFrequency = entry.getValue();
-                            }
-                        }
-
-                        mode.add(mostOccurring);
-                        frequencyMap.remove(mostOccurring);
-                        j++;
-                    }
+                    ArrayList<String> mode = informationFetcher.top3Genre(genres);
 
                     output += "Most commonly listened to genre: " + mode + "\n";
 
@@ -490,29 +490,7 @@ public class MainActivity extends AppCompatActivity {
                         output += "Artist " + (i + 1) + ": " + name + " Genres: " + Arrays.toString(genre) + "\n";
                     }
 
-                    HashMap<String, Integer> frequencyMap = new HashMap<>();
-                    for (String str : genres) {
-                        frequencyMap.put(str, frequencyMap.getOrDefault(str, 0) + 1);
-                    }
-
-                    int j = 0;
-                    ArrayList<String> mode = new ArrayList<>();
-
-                    while (j < 3) {
-                        String mostOccurring = null;
-                        int maxFrequency = 0;
-
-                        for (Map.Entry<String, Integer> entry : frequencyMap.entrySet()) {
-                            if (entry.getValue() > maxFrequency) {
-                                mostOccurring = entry.getKey();
-                                maxFrequency = entry.getValue();
-                            }
-                        }
-
-                        mode.add(mostOccurring);
-                        frequencyMap.remove(mostOccurring);
-                        j++;
-                    }
+                    ArrayList<String> mode = informationFetcher.top3Genre(genres);
 
                     output += "Most commonly listened to genre: " + mode + "\n";
 
@@ -673,29 +651,7 @@ public class MainActivity extends AppCompatActivity {
                         output += "Artist " + (i + 1) + ": " + name + " Genres: " + Arrays.toString(genre) + "\n";
                     }
 
-                    HashMap<String, Integer> frequencyMap = new HashMap<>();
-                    for (String str : genres) {
-                        frequencyMap.put(str, frequencyMap.getOrDefault(str, 0) + 1);
-                    }
-
-                    int j = 0;
-                    ArrayList<String> mode = new ArrayList<>();
-
-                    while (j < 3) {
-                        String mostOccurring = null;
-                        int maxFrequency = 0;
-
-                        for (Map.Entry<String, Integer> entry : frequencyMap.entrySet()) {
-                            if (entry.getValue() > maxFrequency) {
-                                mostOccurring = entry.getKey();
-                                maxFrequency = entry.getValue();
-                            }
-                        }
-
-                        mode.add(mostOccurring);
-                        frequencyMap.remove(mostOccurring);
-                        j++;
-                    }
+                    ArrayList<String> mode = informationFetcher.top3Genre(genres);
 
                     output += "Most commonly listened to genre: " + mode + "\n";
 
@@ -763,7 +719,6 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         String name = trackInfo.getString("name");
-
 
                         names.add(name + " by " + artistNames + "\n\n");
                     }
