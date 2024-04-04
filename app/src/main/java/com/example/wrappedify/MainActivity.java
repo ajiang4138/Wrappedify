@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.wrappedify.Callbacks.TracksCallback;
 import com.example.wrappedify.firebaseLogin.Login;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,10 +23,10 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -69,20 +68,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Initialize the views
-        tokenTextView = (TextView) findViewById(R.id.token_text_view);
-        codeTextView = (TextView) findViewById(R.id.code_text_view);
-        profileTextView = (TextView) findViewById(R.id.response_text_view);
-        mediumTermTextView = (TextView) findViewById(R.id.medium_text_view);
-        mediumTracksTextView = (TextView) findViewById(R.id.mediumTracks_text_view);
+        tokenTextView = findViewById(R.id.token_text_view);
+        codeTextView = findViewById(R.id.code_text_view);
+        profileTextView = findViewById(R.id.response_text_view);
+        mediumTermTextView = findViewById(R.id.medium_text_view);
+        mediumTracksTextView = findViewById(R.id.mediumTracks_text_view);
 
         // Initialize the buttons
-        Button tokenBtn = (Button) findViewById(R.id.token_btn);
-        Button codeBtn = (Button) findViewById(R.id.code_btn);
-        Button profileBtn = (Button) findViewById(R.id.profile_btn);
-        Button mediumBtn = (Button) findViewById(R.id.medium_term_btn);
-        Button logoutBtn = (Button) findViewById(R.id.logoutBtn);
-        Button settingsBtn = (Button) findViewById(R.id.settingsBtn);
-        Button mediumTracksBtn = (Button) findViewById(R.id.medium_tracks_btn);
+        Button tokenBtn = findViewById(R.id.token_btn);
+        Button codeBtn = findViewById(R.id.code_btn);
+        Button profileBtn = findViewById(R.id.profile_btn);
+        Button mediumBtn = findViewById(R.id.medium_term_btn);
+        Button logoutBtn = findViewById(R.id.logoutBtn);
+        Button settingsBtn = findViewById(R.id.settingsBtn);
+        Button mediumTracksBtn = findViewById(R.id.medium_tracks_btn);
 
         // Set the click listeners for the buttons
 
@@ -332,15 +331,26 @@ public class MainActivity extends AppCompatActivity {
 
                     String output = "";
                     ArrayList<String> names = new ArrayList<>();
+                    ArrayList<String> artistNames = new ArrayList<>();
 
                     for (int i = 0; i < length; i++) {
                         JSONObject trackInfo = jsonItems.getJSONObject(i);
+                        JSONObject albumInfo = trackInfo.getJSONObject("album");
+                        JSONArray artistInfo = albumInfo.getJSONArray("artists");
+                        int artistInfoLength = artistInfo.length();
+
+                        for (int j = 0; j < artistInfoLength; j++) {
+                            JSONObject artist = artistInfo.getJSONObject(j);
+                            artistNames.add(artist.getString("name"));
+                        }
+
                         String name = trackInfo.getString("name");
 
-                        names.add(name + "\n");
+
+                        names.add(name + " by " + artistNames + "\n\n");
                     }
 
-                    output += "Tracks: " + names;
+                    output += "Tracks\n " + names;
 
                     setTextAsync(output, mediumTracksTextView);
 

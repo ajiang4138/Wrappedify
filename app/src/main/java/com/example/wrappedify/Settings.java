@@ -3,6 +3,7 @@ package com.example.wrappedify;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -29,11 +30,16 @@ public class Settings extends AppCompatActivity {
         Button editProfileBtn = (Button) findViewById(R.id.editProfileBtn);
         SwitchCompat nightToggle = (SwitchCompat) findViewById(R.id.nightModeSwitch);
         ImageView backBtn = (ImageView) findViewById(R.id.backBtn);
+        RelativeLayout securityAndPrivacy = findViewById(R.id.securityAndPrivacy);
 
         username.setText(user.getEmail());
 
         editProfileBtn.setOnClickListener((v) -> {
             goEditProfile();
+        });
+
+        securityAndPrivacy.setOnClickListener((v) -> {
+            goEditAccount();
         });
 
         backBtn.setOnClickListener((v) -> {
@@ -46,4 +52,10 @@ public class Settings extends AppCompatActivity {
     public void goEditProfile() {
         return;
     }
+
+    public void goEditAccount() {
+        
+    }
+
+
 }
