@@ -22,6 +22,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.spotify.sdk.android.auth.AuthorizationClient;
+import com.spotify.sdk.android.auth.AuthorizationRequest;
+import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 public class Login extends AppCompatActivity {
 
@@ -31,6 +34,7 @@ public class Login extends AppCompatActivity {
     TextView textView;
 
     FirebaseAuth mAuth;
+
 
     @Override
     public void onStart() {

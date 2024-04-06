@@ -4,12 +4,16 @@ import static com.example.wrappedify.imageDrawer.imageDrawer.textAsBitmap;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
@@ -20,11 +24,13 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.wrappedify.firebaseLogin.User;
+import com.example.wrappedify.imageDrawer.imageDrawer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,6 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,6 +55,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -68,6 +77,7 @@ public class generateWrapped extends AppCompatActivity {
     private Call mCall;
 
     // Initialize views
+    private ConstraintLayout rootContent;
     private TextView textViewSong1, textViewSong2, textViewSong3, textViewGenres, textViewAi, textViewRecommendation;
     private TextView textViewArtist1, textViewArtist2, textViewArtist3, topFiveArtists;
     private ImageView imageView1, imageView2, imageView3, artistView;
@@ -88,6 +98,8 @@ public class generateWrapped extends AppCompatActivity {
         setContentView(R.layout.wrapped);
 
         // Set views
+        rootContent = findViewById(R.id.root_content2);
+
         textViewSong1 = findViewById(R.id.textViewSongOne);
         textViewSong2 = findViewById(R.id.textViewSongTwo);
         textViewSong3 = findViewById(R.id.textViewSongThree);
@@ -128,6 +140,13 @@ public class generateWrapped extends AppCompatActivity {
         showMenu();
 
         backBtn.setOnClickListener((v) -> {
+            Intent intent = new Intent(getApplicationContext(), dashboard.class);
+            startActivity(intent);
+            finish();
+        });
+
+        saveBtn.setOnClickListener((v) -> {
+            goSave();
             Intent intent = new Intent(getApplicationContext(), dashboard.class);
             startActivity(intent);
             finish();
@@ -175,8 +194,6 @@ public class generateWrapped extends AppCompatActivity {
 
             getLongTopTracks();
         });
-
-
     }
 
     /**
@@ -839,6 +856,50 @@ public class generateWrapped extends AppCompatActivity {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private void goSave() {
+        Toast.makeText(generateWrapped.this, "Saved to Gallery!", Toast.LENGTH_SHORT).show();
+        getScreen();
+    }
+
+    private void getScreen() {
+        Bitmap image = imageDrawer.getBitmapFromView(rootContent);
+        saveImage(image);
+    }
+
+    private void saveImage(Bitmap finalBitmap) {
+        String root = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES).toString();
+        File myDir = new File(root + "/saved_images");
+        myDir.mkdirs();
+        Random generator = new Random();
+
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-" + n + ".jpg";
+        File file = new File (myDir, fname);
+        // if (file.exists()) file.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+            //     Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Tell the media scanner about the new file so that it is
+        // immediately available to the user.
+        MediaScannerConnection.scanFile(this, new String[]{file.toString()}, null,
+                new MediaScannerConnection.OnScanCompletedListener() {
+                    public void onScanCompleted(String path, Uri uri) {
+                        Log.i("ExternalStorage", "Scanned " + path + ":");
+                        Log.i("ExternalStorage", "-> uri=" + uri);
+                    }
+                });
     }
 
     // Custom FloatingActionButton setup

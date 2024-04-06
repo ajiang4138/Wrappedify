@@ -5,11 +5,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wrappedify.firebaseLogin.Login;
 import com.example.wrappedify.firebaseLogin.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.spotify.sdk.android.auth.AuthorizationClient;
@@ -39,7 +41,10 @@ public class dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        getToken();
+        if (User.getAccessToken() == null) {
+            Toast.makeText(dashboard.this, "Linking Account...", Toast.LENGTH_SHORT).show();
+            getToken();
+        }
 
         arrayList = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerView);
