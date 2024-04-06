@@ -39,13 +39,12 @@ public class Settings extends AppCompatActivity {
         });
 
         securityAndPrivacy.setOnClickListener((v) -> {
-            goEditAccount();
+            goSecurity();
         });
 
         backBtn.setOnClickListener((v) -> {
             finish();
         });
-
 
     }
 
@@ -53,7 +52,7 @@ public class Settings extends AppCompatActivity {
         return;
     }
 
-    public void goEditAccount() {
+    public void goSecurity() {
         
     }
 

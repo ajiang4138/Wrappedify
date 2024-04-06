@@ -121,29 +121,14 @@
                 android:layout_margin="5dp"/>
 
             <Button
-                android:id="@+id/settingsBtn"
+                android:id="@+id/dashboardBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Settings"
-                android:layout_margin="5dp"/>
+                android:text="Dashboard" />
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/dashboardBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dashboard" />
     </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/generateFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/baseline_add_24"
-        app:backgroundTint="@color/spotify_green"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
 
     <WebView
         android:id="@+id/webview"

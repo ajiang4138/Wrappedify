@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wrappedify.firebaseLogin.Login;
-import com.example.wrappedify.firebaseLogin.wrappedObject;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +25,7 @@ import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 import com.squareup.picasso.Picasso;
 
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         Button longBtn = findViewById(R.id.long_term_btn);
 
         Button logoutBtn = findViewById(R.id.logoutBtn);
-        Button settingsBtn = findViewById(R.id.settingsBtn);
         
         Button dashboardBtn = findViewById(R.id.dashboardBtn);
 
@@ -127,8 +126,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         shortBtn.setOnClickListener((v) -> {
-            wrappedObject obj = new wrappedObject();
-            getShortTopArtist(obj);
+            getShortTopArtist();
 
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -136,12 +134,11 @@ public class MainActivity extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
 
-            getShortTopTracks(obj);
+            getShortTopTracks();
         });
 
         mediumBtn.setOnClickListener((v) -> {
-            wrappedObject obj = new wrappedObject();
-            getMediumTopArtist(obj);
+            getMediumTopArtist();
 
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -149,12 +146,11 @@ public class MainActivity extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
 
-            getMediumTopTracks(obj);
+            getMediumTopTracks();
         });
 
         longBtn.setOnClickListener((v) -> {
-            wrappedObject obj = new wrappedObject();
-            getLongTopArtist(obj);
+            getLongTopArtist();
 
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -162,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
 
-            getLongTopTracks(obj);
+            getLongTopTracks();
         });
 
         logoutBtn.setOnClickListener((v) -> {
@@ -170,11 +166,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
             finish();
-        });
-
-        settingsBtn.setOnClickListener((v) -> {
-            Intent intent = new Intent(getApplicationContext(), Settings.class);
-            startActivity(intent);
         });
 
         dashboardBtn.setOnClickListener((v) -> {
@@ -276,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get top 5 recently listened to artists, by short term.
      */
-    public void getShortTopArtist(wrappedObject obj) {
+    public void getShortTopArtist() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -369,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get top 5 recently listened to tracks, by short term
      */
-    public void getShortTopTracks(wrappedObject obj) {
+    public void getShortTopTracks() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -439,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get top 5 recently listened to artists, by medium term.
      */
-    public void getMediumTopArtist(wrappedObject obj) {
+    public void getMediumTopArtist() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -453,7 +444,6 @@ public class MainActivity extends AppCompatActivity {
 
         cancelCall();
         mCall = mOkHttpClient.newCall(request);
-
         mCall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -529,7 +519,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get top 5 recently listened to artists, by medium term.
      */
-    public void getMediumTopTracks(wrappedObject obj) {
+    public void getMediumTopTracks() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -600,7 +590,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get top 5 recently listened to artists, by long term.
      */
-    public void getLongTopArtist(wrappedObject obj) {
+    public void getLongTopArtist() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -690,7 +680,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get top 5 recently listened to tracks, by long term
      */
-    public void getLongTopTracks(wrappedObject obj) {
+    public void getLongTopTracks() {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;

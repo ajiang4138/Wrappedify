@@ -26,8 +26,8 @@
 
     <ImageView
         android:id="@+id/imageViewSongOne"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         app:layout_constraintLeft_toRightOf="@id/numberOne"
         app:layout_constraintTop_toBottomOf="@id/wrappedTitle"
         android:layout_margin="15dp"
@@ -37,10 +37,18 @@
         android:id="@+id/textViewSongOne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Anti-Hero\nTaylor Swift"
+        android:text=""
         app:layout_constraintTop_toTopOf="@id/imageViewSongOne"
         app:layout_constraintLeft_toRightOf="@id/imageViewSongOne"
         android:layout_margin="15dp" />
+
+    <TextView
+        android:id="@+id/textViewArtistOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textViewSongOne"
+        app:layout_constraintLeft_toRightOf="@id/imageViewSongOne"
+        android:layout_marginLeft="15dp" />
 
     <TextView
         android:id="@+id/numberTwo"
@@ -53,8 +61,8 @@
 
     <ImageView
         android:id="@+id/imageViewSongTwo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         app:layout_constraintTop_toBottomOf="@id/imageViewSongOne"
         app:layout_constraintLeft_toLeftOf="@id/imageViewSongOne"
         android:layout_marginTop="15dp"
@@ -64,28 +72,17 @@
         android:id="@+id/textViewSongTwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="About Damn Time\nLizzo"
         app:layout_constraintTop_toTopOf="@id/imageViewSongTwo"
         app:layout_constraintLeft_toRightOf="@id/imageViewSongTwo"
         android:layout_margin="15dp" />
 
-    <ImageView
-        android:id="@+id/imageViewSongThree"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintTop_toBottomOf="@id/imageViewSongTwo"
-        app:layout_constraintLeft_toLeftOf="@id/imageViewSongOne"
-        android:layout_marginTop="15dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
     <TextView
-        android:id="@+id/textViewSongThree"
+        android:id="@+id/textViewArtistTwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="As It Was\nHarry Styles"
-        app:layout_constraintTop_toTopOf="@id/imageViewSongThree"
-        app:layout_constraintLeft_toRightOf="@id/imageViewSongThree"
-        android:layout_margin="15dp" />
+        app:layout_constraintTop_toBottomOf="@id/textViewSongTwo"
+        app:layout_constraintLeft_toRightOf="@id/imageViewSongTwo"
+        android:layout_marginLeft="15dp" />
 
     <TextView
         android:id="@+id/numberThree"
@@ -96,30 +93,81 @@
         app:layout_constraintTop_toTopOf="@id/imageViewSongThree"
         app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"/>
 
+    <ImageView
+        android:id="@+id/imageViewSongThree"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintTop_toBottomOf="@id/imageViewSongTwo"
+        app:layout_constraintLeft_toLeftOf="@id/imageViewSongOne"
+        android:layout_marginTop="15dp"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
     <TextView
-        android:id="@+id/TextViewSongFour"
+        android:id="@+id/textViewSongThree"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="4: \tPink Venom\n\t\t\tBLACKPINK"
-        app:layout_constraintTop_toBottomOf="@id/imageViewSongThree"
-        app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
+        app:layout_constraintTop_toTopOf="@id/imageViewSongThree"
+        app:layout_constraintLeft_toRightOf="@id/imageViewSongThree"
         android:layout_margin="15dp" />
 
     <TextView
-        android:id="@+id/TextViewSongFive"
+        android:id="@+id/textViewArtistThree"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="5: \tOut of Time\n\t\t\tThe Weeknd"
-        app:layout_constraintTop_toBottomOf="@id/TextViewSongFour"
-        app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
+        app:layout_constraintTop_toBottomOf="@id/textViewSongThree"
+        app:layout_constraintLeft_toRightOf="@id/imageViewSongThree"
+        android:layout_marginLeft="15dp" />
+
+    <TextView
+        android:id="@+id/letterT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="T"
+        android:textSize="24dp"
+        app:layout_constraintTop_toTopOf="@id/artistImage"
+        app:layout_constraintLeft_toLeftOf="@id/wrappedTitle" />
+
+    <TextView
+        android:id="@+id/letterO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="O"
+        android:textSize="24dp"
+        app:layout_constraintTop_toBottomOf="@id/letterT"
+        app:layout_constraintLeft_toLeftOf="@id/wrappedTitle" />
+
+    <TextView
+        android:id="@+id/letterP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="P"
+        android:textSize="24dp"
+        app:layout_constraintTop_toBottomOf="@id/letterO"
+        app:layout_constraintLeft_toLeftOf="@id/wrappedTitle" />
+
+    <ImageView
+        android:id="@+id/artistImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintTop_toBottomOf="@id/imageViewSongThree"
+        app:layout_constraintLeft_toLeftOf="@id/imageViewSongTwo"
+        android:layout_marginTop="15dp"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/topFiveArtists"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/artistImage"
+        app:layout_constraintLeft_toRightOf="@id/artistImage"
         android:layout_margin="15dp" />
+
 
     <TextView
         android:id="@+id/TextViewGenres"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Top Genres: Rock, Indy, Pop"
-        app:layout_constraintTop_toBottomOf="@id/TextViewSongFive"
+        app:layout_constraintTop_toBottomOf="@id/artistImage"
         app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
         android:layout_margin="15dp" />
 
@@ -142,21 +190,73 @@
         android:layout_margin="15dp" />
 
     <Button
-        android:id="@+id/buttonHome"
+        android:id="@+id/backBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Home"
+        android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_margin="15dp" />
 
     <Button
-        android:id="@+id/buttonSave"
+        android:id="@+id/saveBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/backBtn"
+        app:layout_constraintRight_toRightOf="@id/customFab"
         android:layout_margin="15dp" />
+
+
+
+    <LinearLayout
+        android:id="@+id/customFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/short_term_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_add_24"
+            android:layout_margin="5dp"
+            app:backgroundTint="@color/spotify_green"
+            app:fabCustomSize="45dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/medium_term_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_menu_24"
+            android:layout_margin="5dp"
+            app:backgroundTint="@color/spotify_green"
+            app:fabCustomSize="45dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/long_term_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_menu_24"
+            android:layout_margin="5dp"
+            app:backgroundTint="@color/spotify_green"
+            app:fabCustomSize="45dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/menuFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_add_24"
+            android:layout_margin="5dp"
+            app:backgroundTint="@color/spotify_green"
+            app:fabSize="normal"/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
