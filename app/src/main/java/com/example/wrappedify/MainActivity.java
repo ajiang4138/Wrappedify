@@ -17,8 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wrappedify.firebaseLogin.Login;
+import com.example.wrappedify.firebaseLogin.wrappedObject;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -34,6 +36,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -71,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final Map<String, Object> dataMap = new HashMap<>();
 
         if (user == null) {
             Intent intent = new Intent(getApplicationContext(), Login.class);
@@ -121,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         shortBtn.setOnClickListener((v) -> {
-            getShortTopArtist();
+            wrappedObject obj = new wrappedObject();
+            getShortTopArtist(obj);
 
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -129,11 +136,12 @@ public class MainActivity extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
 
-            getShortTopTracks();
+            getShortTopTracks(obj);
         });
 
         mediumBtn.setOnClickListener((v) -> {
-            getMediumTopArtist();
+            wrappedObject obj = new wrappedObject();
+            getMediumTopArtist(obj);
 
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -141,11 +149,12 @@ public class MainActivity extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
 
-            getMediumTopTracks();
+            getMediumTopTracks(obj);
         });
 
         longBtn.setOnClickListener((v) -> {
-            getLongTopArtist();
+            wrappedObject obj = new wrappedObject();
+            getLongTopArtist(obj);
 
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -153,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
 
-            getLongTopTracks();
+            getLongTopTracks(obj);
         });
 
         logoutBtn.setOnClickListener((v) -> {
@@ -169,6 +178,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dashboardBtn.setOnClickListener((v) -> {
+            Intent intent = new Intent(getApplicationContext(), dashboard.class);
+            startActivity(intent);
             finish();
         });
 
@@ -195,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
         final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.CODE);
         AuthorizationClient.openLoginActivity(MainActivity.this, AUTH_CODE_REQUEST_CODE, request);
     }
-
 
     /**
      * When the app leaves this activity to momentarily get a token/code, this function
@@ -266,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get top 5 recently listened to artists, by short term.
      */
-    public void getShortTopArtist() {
+    public void getShortTopArtist(wrappedObject obj) {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -359,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get top 5 recently listened to tracks, by short term
      */
-    public void getShortTopTracks() {
+    public void getShortTopTracks(wrappedObject obj) {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -406,7 +416,6 @@ public class MainActivity extends AppCompatActivity {
 
                         String name = trackInfo.getString("name");
 
-
                         names.add(name + " by " + artistNames + "\n\n");
                     }
 
@@ -430,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get top 5 recently listened to artists, by medium term.
      */
-    public void getMediumTopArtist() {
+    public void getMediumTopArtist(wrappedObject obj) {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -520,7 +529,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get top 5 recently listened to artists, by medium term.
      */
-    public void getMediumTopTracks() {
+    public void getMediumTopTracks(wrappedObject obj) {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -591,7 +600,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get top 5 recently listened to artists, by long term.
      */
-    public void getLongTopArtist() {
+    public void getLongTopArtist(wrappedObject obj) {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
@@ -681,7 +690,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get top 5 recently listened to tracks, by long term
      */
-    public void getLongTopTracks() {
+    public void getLongTopTracks(wrappedObject obj) {
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
