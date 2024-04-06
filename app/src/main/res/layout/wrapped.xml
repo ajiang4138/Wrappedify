@@ -184,7 +184,7 @@
             android:id="@+id/TextViewRecommendations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Our Recommendations: MGMT, Kid Cudi"
+            android:text=""
             app:layout_constraintTop_toBottomOf="@id/TextViewGenres"
             app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
             android:layout_margin="10dp" />
@@ -193,13 +193,21 @@
             android:id="@+id/TextViewAI"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Three Words That Describe Your Listening Taste:\nPopular, Zesty, Tiktok"
+            android:text=""
             app:layout_constraintTop_toBottomOf="@id/TextViewRecommendations"
             app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
             android:layout_margin="10dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/generateImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <Button
         android:id="@+id/backBtn"

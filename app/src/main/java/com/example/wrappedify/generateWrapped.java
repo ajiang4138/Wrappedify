@@ -2,6 +2,7 @@ package com.example.wrappedify;
 
 import static com.example.wrappedify.imageDrawer.imageDrawer.textAsBitmap;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
@@ -31,10 +33,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.wrappedify.firebaseLogin.User;
 import com.example.wrappedify.imageDrawer.imageDrawer;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -44,6 +51,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -53,9 +61,11 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -80,7 +90,7 @@ public class generateWrapped extends AppCompatActivity {
     private ConstraintLayout rootContent;
     private TextView textViewSong1, textViewSong2, textViewSong3, textViewGenres, textViewAi, textViewRecommendation;
     private TextView textViewArtist1, textViewArtist2, textViewArtist3, topFiveArtists;
-    private ImageView imageView1, imageView2, imageView3, artistView;
+    private ImageView imageView1, imageView2, imageView3, artistView, generateImageView;
 
     // Initialize buttons
     private Button backBtn, saveBtn;
@@ -92,6 +102,9 @@ public class generateWrapped extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseUser user;
+    StorageReference storageRef;
+    Uri imageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +133,8 @@ public class generateWrapped extends AppCompatActivity {
         imageView3 = findViewById(R.id.imageViewSongThree);
         artistView = findViewById(R.id.artistImage);
 
+        generateImageView = findViewById(R.id.generateImageView);
+
         // Set buttons
         backBtn = findViewById(R.id.backBtn);
         saveBtn = findViewById(R.id.saveBtn);
@@ -147,6 +162,7 @@ public class generateWrapped extends AppCompatActivity {
 
         saveBtn.setOnClickListener((v) -> {
             goSave();
+            Toast.makeText(generateWrapped.this, "Saved!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getApplicationContext(), dashboard.class);
             startActivity(intent);
             finish();
@@ -859,13 +875,17 @@ public class generateWrapped extends AppCompatActivity {
     }
 
     private void goSave() {
-        Toast.makeText(generateWrapped.this, "Saved to Gallery!", Toast.LENGTH_SHORT).show();
-        getScreen();
+        Bitmap image = imageDrawer.getBitmapFromView(rootContent);
+        generateImageView.setImageBitmap(image);
+        imageUri = getImageUri(generateWrapped.this, image);
+        saveImage(image);
     }
 
-    private void getScreen() {
-        Bitmap image = imageDrawer.getBitmapFromView(rootContent);
-        saveImage(image);
+    private Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 
     private void saveImage(Bitmap finalBitmap) {
@@ -885,6 +905,7 @@ public class generateWrapped extends AppCompatActivity {
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
             //     Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+            uploadImage();
             out.flush();
             out.close();
 
@@ -898,6 +919,28 @@ public class generateWrapped extends AppCompatActivity {
                     public void onScanCompleted(String path, Uri uri) {
                         Log.i("ExternalStorage", "Scanned " + path + ":");
                         Log.i("ExternalStorage", "-> uri=" + uri);
+                    }
+                });
+    }
+
+    private void uploadImage() {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy__MM__dd_HH_mm_ss", Locale.ENGLISH);
+        Date date = new Date();
+        String fileName = formatter.format(date);
+
+        storageRef = FirebaseStorage.getInstance().getReference(user.getEmail() + "/" + fileName);
+
+        storageRef.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(generateWrapped.this, "Uploaded to fb", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(generateWrapped.this, "Failed to fb", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
