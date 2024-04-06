@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/spotify_black"
     android:orientation="vertical"
     tools:context=".Settings">
 
@@ -100,7 +99,6 @@
                         android:layout_marginStart="20dp"
                         android:layout_toEndOf="@id/nightModeIcon"
                         android:text="Night Mode"
-                        android:textColor="#FFFFFF"
                         android:textStyle="bold" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -135,7 +133,6 @@
                         android:layout_marginStart="20dp"
                         android:layout_toEndOf="@id/notificationIcon"
                         android:text="Notifications"
-                        android:textColor="#FFFFFF"
                         android:textStyle="bold" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -169,7 +166,6 @@
                         android:layout_marginStart="20dp"
                         android:layout_toEndOf="@id/privateAccountIcon"
                         android:text="Private Account"
-                        android:textColor="#FFFFFF"
                         android:textStyle="bold" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -215,7 +211,6 @@
                         android:layout_marginStart="20dp"
                         android:layout_toEndOf="@id/securityIcon"
                         android:text="Security &amp; Privacy"
-                        android:textColor="#FFFFFF"
                         android:textStyle="bold" />
 
                     <ImageView
