@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!--    Base application Theme />-->
     <style name="Theme.Wrappedify" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/spotify_green</item>
         <item name="materialButtonStyle">@style/Widget.Wrappedify.Button</item>
@@ -31,6 +31,7 @@
         <item name="colorSwitchThumbNormal">#FFFFFF</item>
         <item name="android:colorForeground">#99FFFFFF</item>
     </style>
+
 <!--    <style name="Theme.Wrappedify" parent="Base.Theme.Wrappedify" />-->
-  
+
 </resources>

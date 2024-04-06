@@ -1,13 +1,14 @@
 package com.example.wrappedify;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +18,9 @@ public class Settings extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseUser user;
+    private SwitchCompat nightModeSwitch;
+    private SharedPreferences sharedPreferences;
+    private static final String NIGHT_MODE = "night_mode";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,36 +30,47 @@ public class Settings extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-        TextView username = (TextView) findViewById(R.id.username);
-        Button editProfileBtn = (Button) findViewById(R.id.editProfileBtn);
-        SwitchCompat nightToggle = (SwitchCompat) findViewById(R.id.nightModeSwitch);
-        ImageView backBtn = (ImageView) findViewById(R.id.backBtn);
+        TextView username = findViewById(R.id.username);
+        Button editProfileBtn = findViewById(R.id.editProfileBtn);
+        ImageView backBtn = findViewById(R.id.backBtn);
         RelativeLayout securityAndPrivacy = findViewById(R.id.securityAndPrivacy);
 
-        username.setText(user.getEmail());
+        // Initialize night mode switch and shared preferences
+        nightModeSwitch = findViewById(R.id.nightModeSwitch);
+        sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
 
-        editProfileBtn.setOnClickListener((v) -> {
-            goEditProfile();
+        // Set initial state of the switch based on saved preference
+        nightModeSwitch.setChecked(sharedPreferences.getBoolean(NIGHT_MODE, false));
+
+        // Set listener for the switch
+        nightModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Save the state of the switch to shared preferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(NIGHT_MODE, isChecked);
+            editor.apply();
+
+            // Apply appropriate theme based on the state of the switch
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
         });
 
-        securityAndPrivacy.setOnClickListener((v) -> {
-            goEditAccount();
-        });
+        // Set text for username
+        username.setText(user != null ? user.getEmail() : "");
 
-        backBtn.setOnClickListener((v) -> {
-            finish();
-        });
-
-
+        // Click listeners for buttons
+        editProfileBtn.setOnClickListener((v) -> goEditProfile());
+        securityAndPrivacy.setOnClickListener((v) -> goEditAccount());
+        backBtn.setOnClickListener((v) -> finish());
     }
 
     public void goEditProfile() {
-        return;
+        // Add your functionality for editing profile here
     }
 
     public void goEditAccount() {
-        
+        // Add your functionality for editing account here
     }
-
-
 }
