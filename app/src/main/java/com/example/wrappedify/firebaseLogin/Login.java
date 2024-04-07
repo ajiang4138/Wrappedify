@@ -73,7 +73,6 @@ public class Login extends AppCompatActivity {
         forgotPasswordText.setOnClickListener((v) -> {
             Intent intent = new Intent(getApplicationContext(), UpdateAccount.class);
             startActivity(intent);
-            finish();
         });
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
