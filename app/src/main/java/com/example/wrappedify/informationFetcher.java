@@ -1,5 +1,7 @@
 package com.example.wrappedify;
 
+import com.example.wrappedify.firebaseLogin.User;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +37,7 @@ public class informationFetcher {
             frequencyMap.remove(mostOccurring);
             j++;
         }
+        User.setGenres(mode);
 
         return mode;
     }
@@ -67,5 +70,35 @@ public class informationFetcher {
         }
 
         return output.substring(0, output.length() - 2);
+    }
+
+    public static String artistIdUrl(ArrayList<String> artistId) {
+        String output = "";
+
+        for (int i = 0; i < artistId.size(); i++) {
+            output += artistId.get(i) + "%2C";
+        }
+
+        return output.substring(0, output.length() - 3);
+    }
+
+    public static String trackIdUrl(ArrayList<String> trackId) {
+        String output = "";
+
+        for (int i = 0; i < trackId.size(); i++) {
+            output += trackId.get(i) + "%2C";
+        }
+
+        return output.substring(0, output.length() - 3);
+    }
+
+    public static String genreUrl(ArrayList<String> mode) {
+        String output = "";
+
+        for (int i = 0; i < mode.size(); i++) {
+            output += mode.get(i).replace(" ", "+") + "%2C";
+        }
+
+        return output.substring(0, output.length() - 3);
     }
 }
