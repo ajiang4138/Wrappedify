@@ -362,6 +362,127 @@ public class generateWrapped extends AppCompatActivity {
                     int length = jsonItems.length();
 
                     ArrayList<String> artistNames = new ArrayList<>();
+                    ArrayList<String> trackId = new ArrayList<>();
+
+                    for (int i = 0; i < length; i++) {
+                        JSONObject trackInfo = jsonItems.getJSONObject(i);
+                        JSONObject albumInfo = trackInfo.getJSONObject("album");
+                        JSONArray artistInfo = albumInfo.getJSONArray("artists");
+
+                        JSONArray albumArt = albumInfo.getJSONArray("images");
+                        JSONObject albumImage = albumArt.getJSONObject(0);
+                        String imageURL = albumImage.getString("url");
+
+                        for (int j = 0; j < artistInfo.length(); j++) {
+                            JSONObject artist = artistInfo.getJSONObject(j);
+                            artistNames.add(artist.getString("name"));
+                        }
+
+                        String name = trackInfo.getString("name");
+                        trackId.add(trackInfo.getString("id"));
+                        String artists = informationFetcher.artistText(artistNames);
+
+                        if (i == 0) {
+                            setTextAsync(name + "\n" + artists, textViewSong1);
+
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(imageView1);
+                                }
+                            });
+                        }
+
+                        if (i == 1) {
+                            setTextAsync(name + "\n" + artists, textViewSong2);
+
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(imageView2);
+                                }
+                            });
+                        }
+
+                        if (i == 2) {
+                            setTextAsync(name + "\n" + artists, textViewSong3);
+
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(imageView3);
+                                }
+                            });
+                        }
+                    }
+
+                    User.setTrackId(trackId);
+
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(generateWrapped.this, "Failed to parse data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * Get recommendations based on short term activity
+     */
+    public void getShortRecommendations() {
+        if (User.getAccessToken() == null) {
+            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // get request
+        final Request request = new Request.Builder()
+                .url("https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=3&offset=0")
+                .addHeader("Authorization", "Bearer " + User.getAccessToken())
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(generateWrapped.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    JSONArray jsonItems = jsonObject.getJSONArray("items");
+                    int length = jsonItems.length();
+
+                    ArrayList<String> artistNames = new ArrayList<>();
 
                     for (int i = 0; i < length; i++) {
                         JSONObject trackInfo = jsonItems.getJSONObject(i);
