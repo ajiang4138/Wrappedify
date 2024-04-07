@@ -64,6 +64,13 @@
 
         </activity>
 
+        <activity
+            android:name=".settingsPage.SecurityPrivacy"
+            android:exported="true"
+            android:theme="@style/Theme.Wrappedify">
+
+        </activity>
+
     </application>
 
 </manifest>

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
+import com.example.wrappedify.settingsPage.SecurityPrivacy;
 import com.example.wrappedify.settingsPage.deleteAccount;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,7 +56,8 @@ public class Settings extends AppCompatActivity {
     }
 
     public void goSecurity() {
-
+        Intent intent = new Intent(getApplicationContext(), SecurityPrivacy.class);
+        startActivity(intent);
     }
     public void goEditAccount() {
         Intent intent = new Intent(getApplicationContext(), deleteAccount.class);
