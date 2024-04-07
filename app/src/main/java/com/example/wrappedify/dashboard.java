@@ -1,16 +1,20 @@
 package com.example.wrappedify;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.wrappedify.firebaseLogin.Login;
 import com.example.wrappedify.firebaseLogin.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -158,5 +162,4 @@ public class dashboard extends AppCompatActivity {
                 .setCampaign("your-campaign-token")
                 .build();
     }
-
 }

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -20,6 +21,8 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.wrappedify.firebaseLogin.User;
+import com.example.wrappedify.firebaseLogin.UserModel;
 import com.example.wrappedify.settingsPage.deleteAccount;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,10 +39,14 @@ public class Settings extends AppCompatActivity {
     Uri selectedImageUri;
     ImageView profilePic;
 
+    UserModel currentUserModel;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
+
+        getUserData();
 
         imagePickLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -64,6 +71,10 @@ public class Settings extends AppCompatActivity {
 
         username.setText(user.getEmail());
 
+        // User Model setup
+        currentUserModel = new UserModel();
+        currentUserModel.setUserId(user.getEmail());
+
         editProfileBtn.setOnClickListener((v) -> {
             goEditProfile();
         });
@@ -73,6 +84,13 @@ public class Settings extends AppCompatActivity {
         });
 
         backBtn.setOnClickListener((v) -> {
+            if (selectedImageUri != null) {
+                User.getCurrentProfilePicStorageRef().putFile(selectedImageUri)
+                        .addOnCompleteListener(task -> {
+                            updateToFirestore();
+                        });
+            }
+
             finish();
         });
 
@@ -85,6 +103,7 @@ public class Settings extends AppCompatActivity {
                             return null;
                         }
                     });
+
         });
 
     }
@@ -104,6 +123,29 @@ public class Settings extends AppCompatActivity {
 
     public void setProfilePic(Context context, Uri imageUri, ImageView imageView) {
         Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(imageView);
+    }
+
+    private void updateToFirestore(){
+        User.currentUserDetails().set(currentUserModel)
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        Toast.makeText(Settings.this, "Updated Successfully!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    else {
+                        Toast.makeText(Settings.this, "Update failed.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void getUserData() {
+        User.getCurrentProfilePicStorageRef().getDownloadUrl()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Uri uri = task.getResult();
+                        setProfilePic(Settings.this, uri, profilePic);
+                    }
+                });
     }
 
 
