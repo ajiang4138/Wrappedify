@@ -117,10 +117,7 @@ public class Settings extends AppCompatActivity {
     }
 
     public void goSecurity() {
-        FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(getApplicationContext(), Login.class);
-        startActivity(intent);
-        finish();
+
     }
     public void goEditAccount() {
         Intent intent = new Intent(getApplicationContext(), deleteAccount.class);
