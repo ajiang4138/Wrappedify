@@ -19,10 +19,13 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
+
+import com.example.wrappedify.firebaseLogin.Login;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.wrappedify.firebaseLogin.User;
 import com.example.wrappedify.firebaseLogin.UserModel;
+
 import com.example.wrappedify.settingsPage.deleteAccount;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.auth.FirebaseAuth;
@@ -114,7 +117,10 @@ public class Settings extends AppCompatActivity {
     }
 
     public void goSecurity() {
-
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(getApplicationContext(), Login.class);
+        startActivity(intent);
+        finish();
     }
     public void goEditAccount() {
         Intent intent = new Intent(getApplicationContext(), deleteAccount.class);

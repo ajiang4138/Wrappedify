@@ -30,6 +30,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.webkit.internal.ApiFeature;
 
 import com.example.wrappedify.firebaseLogin.User;
 import com.example.wrappedify.imageDrawer.imageDrawer;
@@ -47,6 +48,7 @@ import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 import com.squareup.picasso.Picasso;
 
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,6 +60,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -185,6 +188,14 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getShortTopTracks();
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            getRecommendations();
         });
 
         mediumTermFab.setOnClickListener((v) -> {
@@ -197,6 +208,14 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getMediumTopTracks();
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            getRecommendations();
         });
 
         longTermFab.setOnClickListener((v) -> {
@@ -209,6 +228,14 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getLongTopTracks();
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            getRecommendations();
         });
     }
 
@@ -276,8 +303,8 @@ public class generateWrapped extends AppCompatActivity {
                     JSONObject artistImage = artistImages.getJSONObject(0);
                     String imageURL = artistImage.getString("url");
 
-                    String output = "";
                     ArrayList<String> names = new ArrayList<>();
+                    ArrayList<String> artistId = new ArrayList<>();
                     ArrayList<String> genres = new ArrayList<>();
 
                     for (int i = 0; i < length; i++) {
@@ -290,9 +317,12 @@ public class generateWrapped extends AppCompatActivity {
                             genre[j] = genreList.getString(j);
                         }
 
+                        artistId.add(artistInfo.getString("id"));
                         names.add(name);
                         genres.addAll(Arrays.asList(genre));
                     }
+
+                    User.setArtistId(artistId);
 
                     // Setting Image
                     Handler uiHandler = new Handler(Looper.getMainLooper());
@@ -307,7 +337,7 @@ public class generateWrapped extends AppCompatActivity {
                         }
                     });
 
-                    output = informationFetcher.genresText(informationFetcher.top3Genre(genres));
+                    String output = informationFetcher.genresText(informationFetcher.top3Genre(genres));
 
                     setTextAsync(output, textViewGenres);
 
@@ -361,10 +391,10 @@ public class generateWrapped extends AppCompatActivity {
                     JSONArray jsonItems = jsonObject.getJSONArray("items");
                     int length = jsonItems.length();
 
-                    ArrayList<String> artistNames = new ArrayList<>();
                     ArrayList<String> trackId = new ArrayList<>();
 
                     for (int i = 0; i < length; i++) {
+                        ArrayList<String> artistNames = new ArrayList<>();
                         JSONObject trackInfo = jsonItems.getJSONObject(i);
                         JSONObject albumInfo = trackInfo.getJSONObject("album");
                         JSONArray artistInfo = albumInfo.getJSONArray("artists");
@@ -450,17 +480,24 @@ public class generateWrapped extends AppCompatActivity {
     }
 
     /**
-     * Get recommendations based on short term activity
+     * Get recommendations
      */
-    public void getShortRecommendations() {
+    public void getRecommendations() {
         if (User.getAccessToken() == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        String artistIdUrl = informationFetcher.artistIdUrl(User.getArtistId());
+        String genreUrl = informationFetcher.genreUrl(User.getGenres());
+
+        String url =
+                "https://api.spotify.com/v1/recommendations?limit=5&seed_artists=" + artistIdUrl
+                            + "&seed_genres=" + genreUrl;
+
         // get request
         final Request request = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=3&offset=0")
+                .url(url)
                 .addHeader("Authorization", "Bearer " + User.getAccessToken())
                 .build();
 
@@ -478,80 +515,26 @@ public class generateWrapped extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
+                    String output = "Recommended Songs: \n";
                     JSONObject jsonObject = new JSONObject(response.body().string());
-                    JSONArray jsonItems = jsonObject.getJSONArray("items");
-                    int length = jsonItems.length();
+                    JSONArray trackList = jsonObject.getJSONArray("tracks");
 
-                    ArrayList<String> artistNames = new ArrayList<>();
+                    int length = trackList.length();
 
                     for (int i = 0; i < length; i++) {
-                        JSONObject trackInfo = jsonItems.getJSONObject(i);
-                        JSONObject albumInfo = trackInfo.getJSONObject("album");
-                        JSONArray artistInfo = albumInfo.getJSONArray("artists");
-
-                        JSONArray albumArt = albumInfo.getJSONArray("images");
-                        JSONObject albumImage = albumArt.getJSONObject(0);
-                        String imageURL = albumImage.getString("url");
+                        ArrayList<String> artistNames = new ArrayList<>();
+                        JSONObject trackInfo = trackList.getJSONObject(i);
+                        JSONArray artistInfo = trackInfo.getJSONArray("artists");
 
                         for (int j = 0; j < artistInfo.length(); j++) {
                             JSONObject artist = artistInfo.getJSONObject(j);
                             artistNames.add(artist.getString("name"));
                         }
 
-                        String name = trackInfo.getString("name");
-                        String artists = informationFetcher.artistText(artistNames);
-
-                        if (i == 0) {
-                            setTextAsync(name + "\n" + artists, textViewSong1);
-
-                            // Setting Image
-                            Handler uiHandler = new Handler(Looper.getMainLooper());
-                            uiHandler.post(new Runnable(){
-                                @Override
-                                public void run() {
-                                    Picasso.get()
-                                            .load(imageURL)
-                                            .resize(300, 300)
-                                            .centerCrop()
-                                            .into(imageView1);
-                                }
-                            });
-                        }
-
-                        if (i == 1) {
-                            setTextAsync(name + "\n" + artists, textViewSong2);
-
-                            // Setting Image
-                            Handler uiHandler = new Handler(Looper.getMainLooper());
-                            uiHandler.post(new Runnable(){
-                                @Override
-                                public void run() {
-                                    Picasso.get()
-                                            .load(imageURL)
-                                            .resize(300, 300)
-                                            .centerCrop()
-                                            .into(imageView2);
-                                }
-                            });
-                        }
-
-                        if (i == 2) {
-                            setTextAsync(name + "\n" + artists, textViewSong3);
-
-                            // Setting Image
-                            Handler uiHandler = new Handler(Looper.getMainLooper());
-                            uiHandler.post(new Runnable(){
-                                @Override
-                                public void run() {
-                                    Picasso.get()
-                                            .load(imageURL)
-                                            .resize(300, 300)
-                                            .centerCrop()
-                                            .into(imageView3);
-                                }
-                            });
-                        }
+                        output += trackInfo.getString("name") + " by " + informationFetcher.artistText(artistNames) + "\n";
                     }
+
+                    setTextAsync(output, textViewRecommendation);
 
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -690,9 +673,8 @@ public class generateWrapped extends AppCompatActivity {
                     JSONArray jsonItems = jsonObject.getJSONArray("items");
                     int length = jsonItems.length();
 
-                    ArrayList<String> artistNames = new ArrayList<>();
-
                     for (int i = 0; i < length; i++) {
+                        ArrayList<String> artistNames = new ArrayList<>();
                         JSONObject trackInfo = jsonItems.getJSONObject(i);
                         JSONObject albumInfo = trackInfo.getJSONObject("album");
                         JSONArray artistInfo = albumInfo.getJSONArray("artists");
@@ -898,9 +880,8 @@ public class generateWrapped extends AppCompatActivity {
                     JSONArray jsonItems = jsonObject.getJSONArray("items");
                     int length = jsonItems.length();
 
-                    ArrayList<String> artistNames = new ArrayList<>();
-
                     for (int i = 0; i < length; i++) {
+                        ArrayList<String> artistNames = new ArrayList<>();
                         JSONObject trackInfo = jsonItems.getJSONObject(i);
                         JSONObject albumInfo = trackInfo.getJSONObject("album");
                         JSONArray artistInfo = albumInfo.getJSONArray("artists");
