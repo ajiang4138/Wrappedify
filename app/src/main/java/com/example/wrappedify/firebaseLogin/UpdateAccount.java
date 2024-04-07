@@ -27,6 +27,7 @@ public class UpdateAccount extends AppCompatActivity {
     ProgressBar progressBar;
 
     FirebaseAuth mAuth;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,6 @@ public class UpdateAccount extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start LoginActivity
-                Intent intent = new Intent(UpdateAccount.this, Login.class);
-                startActivity(intent);
                 finish();
             }
         });
@@ -64,6 +63,7 @@ public class UpdateAccount extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(UpdateAccount.this, "Password reset email sent!", Toast.LENGTH_SHORT).show();
+                                    finish();
                                 } else {
                                     Toast.makeText(UpdateAccount.this, "Failed to send password reset email!", Toast.LENGTH_SHORT).show();
                                 }
@@ -75,5 +75,3 @@ public class UpdateAccount extends AppCompatActivity {
 
     }
 }
-
-
