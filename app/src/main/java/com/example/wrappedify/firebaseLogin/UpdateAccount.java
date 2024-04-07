@@ -27,6 +27,7 @@ public class UpdateAccount extends AppCompatActivity {
     ProgressBar progressBar;
 
     FirebaseAuth mAuth;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,5 +75,3 @@ public class UpdateAccount extends AppCompatActivity {
 
     }
 }
-
-
