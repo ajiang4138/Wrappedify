@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
+import com.example.wrappedify.settingsPage.SecurityPrivacy;
 
 import com.example.wrappedify.firebaseLogin.Login;
 import com.bumptech.glide.Glide;
@@ -117,7 +118,8 @@ public class Settings extends AppCompatActivity {
     }
 
     public void goSecurity() {
-
+        Intent intent = new Intent(getApplicationContext(), SecurityPrivacy.class);
+        startActivity(intent);
     }
     public void goEditAccount() {
         Intent intent = new Intent(getApplicationContext(), deleteAccount.class);
