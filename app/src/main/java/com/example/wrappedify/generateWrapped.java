@@ -1050,7 +1050,7 @@ public class generateWrapped extends AppCompatActivity {
         Date date = new Date();
         String fileName = formatter.format(date);
 
-        storageRef = FirebaseStorage.getInstance().getReference(user.getEmail() + "/" + fileName);
+        storageRef = FirebaseStorage.getInstance().getReference(User.currentUserId() + "/" + fileName);
 
         storageRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

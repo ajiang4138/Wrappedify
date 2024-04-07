@@ -131,10 +131,6 @@ public class Settings extends AppCompatActivity {
                     if(task.isSuccessful()) {
                         Toast.makeText(Settings.this, "Updated Successfully!", Toast.LENGTH_SHORT).show();
                     }
-
-                    else {
-                        Toast.makeText(Settings.this, "Update failed.", Toast.LENGTH_SHORT).show();
-                    }
                 });
     }
 
