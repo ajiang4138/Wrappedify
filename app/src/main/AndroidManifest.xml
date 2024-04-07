@@ -4,7 +4,8 @@
     package="com.example.wrappedify">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -15,19 +16,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Wrappedify"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+
+        <activity
+            android:name=".generateWrapped"
+            android:exported="false" />
+
+        <activity
+            android:name=".settingsPage.deleteAccount"
+            android:exported="false" />
 
         <activity
             android:name=".dashboard"
             android:exported="false" />
+
         <activity
             android:name=".firebaseLogin.Registration"
             android:exported="false"
             android:theme="@style/Theme.Wrappedify" />
+
         <activity
             android:name=".firebaseLogin.Login"
             android:exported="true"
-            android:theme="@style/Theme.Wrappedify" >
+            android:theme="@style/Theme.Wrappedify">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,13 +53,15 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Wrappedify" >
+            android:theme="@style/Theme.Wrappedify">
+
         </activity>
 
         <activity
             android:name=".Settings"
             android:exported="true"
-            android:theme="@style/Theme.Wrappedify" >
+            android:theme="@style/Theme.Wrappedify">
+
         </activity>
 
     </application>

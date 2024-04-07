@@ -38,4 +38,34 @@ public class informationFetcher {
 
         return mode;
     }
+
+    public static String genresText(ArrayList<String> mode) {
+        String output = "Top Genres: ";
+
+        for (int i = 0; i < mode.size(); i++) {
+            output += mode.get(i) + ", ";
+        }
+
+        return output.substring(0, output.length() - 2);
+    }
+
+    public static String namesText(ArrayList<String> names) {
+        String output = "Top Artists: \n";
+
+        for (int i = 0; i < names.size(); i++) {
+            output += names.get(i) + "\n";
+        }
+
+        return output.substring(0, output.length() - 1);
+    }
+
+    public static String artistText(ArrayList<String> artistNames) {
+        String output = "";
+
+        for (int i = 0; i < artistNames.size(); i++) {
+            output += artistNames.get(i) + ", ";
+        }
+
+        return output.substring(0, output.length() - 2);
+    }
 }

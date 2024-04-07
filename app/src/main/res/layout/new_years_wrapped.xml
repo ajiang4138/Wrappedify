@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/new_years_theme">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root_content2"
@@ -184,7 +185,7 @@
             android:id="@+id/TextViewRecommendations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="Our Recommendations: MGMT, Kid Cudi"
             app:layout_constraintTop_toBottomOf="@id/TextViewGenres"
             app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
             android:layout_margin="10dp" />
@@ -193,21 +194,13 @@
             android:id="@+id/TextViewAI"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="Three Words That Describe Your Listening Taste:\nPopular, Zesty, Tiktok"
             app:layout_constraintTop_toBottomOf="@id/TextViewRecommendations"
             app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
             android:layout_margin="10dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
-        android:id="@+id/generateImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <Button
         android:id="@+id/backBtn"

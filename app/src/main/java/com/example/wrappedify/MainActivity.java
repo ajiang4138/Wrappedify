@@ -19,11 +19,13 @@ import android.widget.Toast;
 import com.example.wrappedify.firebaseLogin.Login;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 import com.squareup.picasso.Picasso;
 
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +36,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -71,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final Map<String, Object> dataMap = new HashMap<>();
 
         if (user == null) {
             Intent intent = new Intent(getApplicationContext(), Login.class);
@@ -101,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         Button longBtn = findViewById(R.id.long_term_btn);
 
         Button logoutBtn = findViewById(R.id.logoutBtn);
-        Button settingsBtn = findViewById(R.id.settingsBtn);
         
         Button dashboardBtn = findViewById(R.id.dashboardBtn);
 
@@ -163,12 +168,9 @@ public class MainActivity extends AppCompatActivity {
             finish();
         });
 
-        settingsBtn.setOnClickListener((v) -> {
-            Intent intent = new Intent(getApplicationContext(), Settings.class);
-            startActivity(intent);
-        });
-
         dashboardBtn.setOnClickListener((v) -> {
+            Intent intent = new Intent(getApplicationContext(), dashboard.class);
+            startActivity(intent);
             finish();
         });
 
@@ -195,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
         final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.CODE);
         AuthorizationClient.openLoginActivity(MainActivity.this, AUTH_CODE_REQUEST_CODE, request);
     }
-
 
     /**
      * When the app leaves this activity to momentarily get a token/code, this function
@@ -406,7 +407,6 @@ public class MainActivity extends AppCompatActivity {
 
                         String name = trackInfo.getString("name");
 
-
                         names.add(name + " by " + artistNames + "\n\n");
                     }
 
@@ -444,7 +444,6 @@ public class MainActivity extends AppCompatActivity {
 
         cancelCall();
         mCall = mOkHttpClient.newCall(request);
-
         mCall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
