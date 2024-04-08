@@ -9,12 +9,13 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 public class User {
+    public static final String CLIENT_ID = "ccb7c7bbeb9d455e96a4fbaac95885f1";
+    public static final String REDIRECT_URI = "wrappedify://auth";
+    public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static String accessToken;
     public static ArrayList<String> genres;
     public static ArrayList<String> artistId;
     public static ArrayList<String> trackId;
-
-    public static String profilePic;
 
     public static String getAccessToken() {
         return accessToken;

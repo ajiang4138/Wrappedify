@@ -55,6 +55,30 @@
         android:padding="15dp">
 
         <RelativeLayout
+            android:id="@+id/link_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:padding="10dp"
+                android:text="Link Spotify"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/right_arrow" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/unlink_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

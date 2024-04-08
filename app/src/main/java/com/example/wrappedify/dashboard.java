@@ -1,5 +1,9 @@
 package com.example.wrappedify;
 
+import static com.example.wrappedify.firebaseLogin.User.AUTH_TOKEN_REQUEST_CODE;
+import static com.example.wrappedify.firebaseLogin.User.CLIENT_ID;
+import static com.example.wrappedify.firebaseLogin.User.REDIRECT_URI;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,10 +32,6 @@ public class dashboard extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ArrayList<WrappedFeed> arrayList;
 
-    public static final int AUTH_TOKEN_REQUEST_CODE = 0;
-    public static final String CLIENT_ID = "ccb7c7bbeb9d455e96a4fbaac95885f1";
-    public static final String REDIRECT_URI = "wrappedify://auth";
-
     boolean menuOpen = false;
     float translationYaxis = 100f;
     OvershootInterpolator interpolator = new OvershootInterpolator();
@@ -59,7 +59,7 @@ public class dashboard extends AppCompatActivity {
 
         showMenu();
 
-        arrayList.add(new WrappedFeed(R.drawable.ic_launcher_background, R.drawable.post, "title", "message"));
+        arrayList.add(new WrappedFeed(R.drawable.ic_launcher_background, R.drawable.post, "Date", "message"));
 
         RecyclerAdapter recyclerAdapter = new RecyclerAdapter(arrayList);
         recyclerView.setAdapter(recyclerAdapter);
@@ -75,6 +75,10 @@ public class dashboard extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), Settings.class);
             startActivity(intent);
         });
+    }
+
+    public void populateFeed() {
+
     }
 
     private void showMenu() {

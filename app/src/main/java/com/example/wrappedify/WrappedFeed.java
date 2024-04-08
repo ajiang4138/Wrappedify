@@ -6,6 +6,10 @@ public class WrappedFeed {
     private String title;
     private String message;
 
+    public WrappedFeed() {
+
+    }
+
     public WrappedFeed(int profileIcon, int postImage, String title, String message) {
         this.profileIcon = profileIcon;
         this.postImage = postImage;

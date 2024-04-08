@@ -63,9 +63,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class generateWrapped extends AppCompatActivity {
-    public static final String CLIENT_ID = "ccb7c7bbeb9d455e96a4fbaac95885f1";
-    public static final String CLIENT_SECRET = "6daf73f2aea74601bd4925a1d1430294";
-    public static final String REDIRECT_URI = "wrappedify://auth";
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
 
@@ -241,7 +238,7 @@ public class generateWrapped extends AppCompatActivity {
      */
     public void getTopArtist(String term) {
         if (User.accessToken == null) {
-            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You need to link your account first!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -335,7 +332,7 @@ public class generateWrapped extends AppCompatActivity {
      */
     public void getTopTracks(String term) {
         if (User.getAccessToken() == null) {
-            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You need to link your account first!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -456,7 +453,7 @@ public class generateWrapped extends AppCompatActivity {
      */
     public void getRecommendations() {
         if (User.getAccessToken() == null) {
-            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You need to link your account first!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -550,8 +547,6 @@ public class generateWrapped extends AppCompatActivity {
         try {
             FileOutputStream out = new FileOutputStream(file);
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-            //     Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
             uploadImage();
             out.flush();
             out.close();
@@ -559,8 +554,7 @@ public class generateWrapped extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // Tell the media scanner about the new file so that it is
-        // immediately available to the user.
+        // Tell the media scanner about the new file so that it is immediately available to the user.
         MediaScannerConnection.scanFile(this, new String[]{file.toString()}, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
                     public void onScanCompleted(String path, Uri uri) {
@@ -582,12 +576,18 @@ public class generateWrapped extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(generateWrapped.this, "Uploaded to fb", Toast.LENGTH_SHORT).show();
+                        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                WrappedFeed wrappedFeed = new WrappedFeed();
+
+                            }
+                        });
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(generateWrapped.this, "Failed to fb", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(generateWrapped.this, "Failed to store.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -645,5 +645,4 @@ public class generateWrapped extends AppCompatActivity {
             mCall.cancel();
         }
     }
-
 }
