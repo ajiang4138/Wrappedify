@@ -42,7 +42,6 @@ public class Settings extends AppCompatActivity {
     ActivityResultLauncher<Intent> imagePickLauncher;
     Uri selectedImageUri;
     ImageView profilePic;
-
     UserModel currentUserModel;
 
     @Override
@@ -94,7 +93,6 @@ public class Settings extends AppCompatActivity {
                             updateToFirestore();
                         });
             }
-
             finish();
         });
 
