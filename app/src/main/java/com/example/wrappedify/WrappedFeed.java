@@ -19,16 +19,31 @@ public class WrappedFeed {
         return profileIcon;
     }
 
+    public void setProfileIcon(int profileIcon) {
+        this.profileIcon = profileIcon;
+    }
+
     public String getPostImage() {
         return postImage;
+    }
+
+    public void setPostImage(String postImage) {
+        this.postImage = postImage;
     }
 
     public String getTitle() {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getMessage() {
         return message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

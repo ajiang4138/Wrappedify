@@ -574,10 +574,8 @@ public class generateWrapped extends AppCompatActivity {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy__MM__dd_HH_mm_ss", Locale.ENGLISH);
         SimpleDateFormat titleBuild = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
-        Date date2 = new Date();
         Date date = new Date();
         String fileName = formatter.format(date);
-        String titleName = titleBuild.format(date2);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference(User.currentUserId() + "/" + fileName);
@@ -588,14 +586,17 @@ public class generateWrapped extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
 
-                        if (downloadUri.isSuccessful()) {
-                            Toast.makeText(generateWrapped.this, "is Success!", Toast.LENGTH_SHORT).show();
-                            String generatedFilePath = downloadUri.getResult().toString();
+                        downloadUri.addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
 
-                            WrappedFeed wrappedFeed = new WrappedFeed(0, generatedFilePath, titleName, null);
+                                String generatedFilePath = downloadUri.getResult().toString();
 
-                            firebaseFirestore.collection(user.getUid()).document(fileName).set(wrappedFeed);
-                        }
+                                WrappedFeed wrappedFeed = new WrappedFeed(0, generatedFilePath, "Title", "Message");
+
+                                firebaseFirestore.collection(user.getUid()).document(fileName).set(wrappedFeed);
+                            }
+                        });
                     }
                 });
     }
