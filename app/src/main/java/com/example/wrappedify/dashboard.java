@@ -4,6 +4,7 @@ import static com.example.wrappedify.firebaseLogin.User.AUTH_TOKEN_REQUEST_CODE;
 import static com.example.wrappedify.firebaseLogin.User.CLIENT_ID;
 import static com.example.wrappedify.firebaseLogin.User.REDIRECT_URI;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,7 +25,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.spotify.sdk.android.auth.AuthorizationClient;
@@ -35,7 +41,8 @@ import java.util.Map;
 
 public class dashboard extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private ArrayList<WrappedFeed> feed = new ArrayList<>();
+    private ArrayList<WrappedFeed> feed;
+    private RecyclerAdapter recyclerAdapter;
 
     boolean menuOpen = false;
     float translationYaxis = 100f;
@@ -56,24 +63,34 @@ public class dashboard extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        feed = new ArrayList<WrappedFeed>();
 
         if (User.getAccessToken() == null) {
             Toast.makeText(dashboard.this, "Linking Account...", Toast.LENGTH_SHORT).show();
             getToken();
         }
 
+        /*
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("Generating Feed...");
+            progressDialog.show();
+         */
+
         recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         menuFab = findViewById(R.id.menuFab);
         generateWrappedFab = findViewById(R.id.generateWrappedFab);
         settingsFab = findViewById(R.id.settingsFab);
 
         showMenu();
-        populateFeed();
 
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(feed);
+        recyclerAdapter = new RecyclerAdapter(dashboard.this, feed);
         recyclerView.setAdapter(recyclerAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        populateFeed();
 
         generateWrappedFab.setOnClickListener((v) -> {
             Intent intent = new Intent(getApplicationContext(), generateWrapped.class);
@@ -87,8 +104,39 @@ public class dashboard extends AppCompatActivity {
         });
     }
 
-    public void populateFeed() {
+    private void populateFeed() {
 
+        firebaseFirestore.collection(user.getUid()).orderBy("timestamp", Query.Direction.ASCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                        if (error != null) {
+                            /*
+                            if (progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
+                             */
+                            Log.e("Firestore Error", error.getMessage());
+                            return;
+                        }
+
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                feed.add(0, dc.getDocument().toObject(WrappedFeed.class));
+                            }
+
+                            recyclerAdapter.notifyDataSetChanged();
+                            /*
+                            if (progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
+                             */
+
+                         }
+
+                    }
+                });
     }
 
     private void showMenu() {

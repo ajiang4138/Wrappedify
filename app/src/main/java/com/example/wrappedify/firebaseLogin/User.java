@@ -17,6 +17,8 @@ public class User {
     public static ArrayList<String> artistId;
     public static ArrayList<String> trackId;
 
+    public static String generatedTerm;
+
     public static String getAccessToken() {
         return accessToken;
     }
@@ -51,6 +53,14 @@ public class User {
 
     public static String currentUserId(){
         return FirebaseAuth.getInstance().getUid();
+    }
+
+    public static String getGeneratedTerm() {
+        return generatedTerm;
+    }
+
+    public static void setGeneratedTerm(String generatedTerm) {
+        User.generatedTerm = generatedTerm;
     }
 
     public static DocumentReference currentUserDetails(){

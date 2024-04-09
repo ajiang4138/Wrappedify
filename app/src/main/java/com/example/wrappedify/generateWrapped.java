@@ -2,6 +2,7 @@ package com.example.wrappedify;
 
 import static com.example.wrappedify.imageDrawer.imageDrawer.textAsBitmap;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -91,6 +92,8 @@ public class generateWrapped extends AppCompatActivity {
     FirebaseFirestore firebaseFirestore;
     StorageReference storageRef;
     Uri imageUri;
+
+    ProgressDialog progressDialog;
     private String fname;
 
     @Override
@@ -158,12 +161,11 @@ public class generateWrapped extends AppCompatActivity {
 
 
         shortTermFab.setOnClickListener((v) -> {
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("Generating Feed...");
+            progressDialog.show();
+            User.setGeneratedTerm("Short Term");
             getTopArtist("short");
 
             try {
@@ -181,9 +183,18 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getRecommendations();
+
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
         });
 
         mediumTermFab.setOnClickListener((v) -> {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("Generating Feed...");
+            progressDialog.show();
+            User.setGeneratedTerm("Medium Term");
             getTopArtist("medium");
 
             try {
@@ -201,9 +212,17 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getRecommendations();
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
         });
 
         longTermFab.setOnClickListener((v) -> {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("Generating Feed...");
+            progressDialog.show();
+            User.setGeneratedTerm("Long Term");
             getTopArtist("long");
 
             try {
@@ -221,6 +240,9 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getRecommendations();
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
         });
     }
 
@@ -574,8 +596,13 @@ public class generateWrapped extends AppCompatActivity {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy__MM__dd_HH_mm_ss", Locale.ENGLISH);
         SimpleDateFormat titleBuild = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+        SimpleDateFormat timeStamp = new SimpleDateFormat("yyyy,MM,dd,HH,mm,ss");
         Date date = new Date();
+        Date date2 = new Date();
+        Date date3 = new Date();
         String fileName = formatter.format(date);
+        String titleName = titleBuild.format(date2);
+        String timeName = timeStamp.format(date3);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference(User.currentUserId() + "/" + fileName);
@@ -592,7 +619,7 @@ public class generateWrapped extends AppCompatActivity {
 
                                 String generatedFilePath = downloadUri.getResult().toString();
 
-                                WrappedFeed wrappedFeed = new WrappedFeed(0, generatedFilePath, "Title", "Message");
+                                WrappedFeed wrappedFeed = new WrappedFeed(0, generatedFilePath, titleName, User.getGeneratedTerm(), timeName);
 
                                 firebaseFirestore.collection(user.getUid()).document(fileName).set(wrappedFeed);
                             }
