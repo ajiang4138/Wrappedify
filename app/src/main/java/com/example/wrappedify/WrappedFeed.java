@@ -2,15 +2,13 @@ package com.example.wrappedify;
 
 public class WrappedFeed {
     private int profileIcon;
-    private int postImage;
+    private String postImage;
     private String title;
     private String message;
 
-    public WrappedFeed() {
+    public WrappedFeed() {}
 
-    }
-
-    public WrappedFeed(int profileIcon, int postImage, String title, String message) {
+    public WrappedFeed(int profileIcon, String postImage, String title, String message) {
         this.profileIcon = profileIcon;
         this.postImage = postImage;
         this.title = title;
@@ -21,31 +19,16 @@ public class WrappedFeed {
         return profileIcon;
     }
 
-    public void setProfileIcon(int profileIcon) {
-        this.profileIcon = profileIcon;
-    }
-
-    public int getPostImage() {
+    public String getPostImage() {
         return postImage;
-    }
-
-    public void setPostImage(int postImage) {
-        this.postImage = postImage;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

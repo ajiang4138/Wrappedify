@@ -4,33 +4,40 @@ import static com.example.wrappedify.firebaseLogin.User.AUTH_TOKEN_REQUEST_CODE;
 import static com.example.wrappedify.firebaseLogin.User.CLIENT_ID;
 import static com.example.wrappedify.firebaseLogin.User.REDIRECT_URI;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.example.wrappedify.firebaseLogin.Login;
 import com.example.wrappedify.firebaseLogin.User;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class dashboard extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private ArrayList<WrappedFeed> arrayList;
+    private ArrayList<WrappedFeed> feed = new ArrayList<>();
 
     boolean menuOpen = false;
     float translationYaxis = 100f;
@@ -40,17 +47,23 @@ public class dashboard extends AppCompatActivity {
     FloatingActionButton generateWrappedFab;
     FloatingActionButton settingsFab;
 
+    FirebaseAuth mAuth;
+    FirebaseUser user;
+    FirebaseFirestore firebaseFirestore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
 
         if (User.getAccessToken() == null) {
             Toast.makeText(dashboard.this, "Linking Account...", Toast.LENGTH_SHORT).show();
             getToken();
         }
 
-        arrayList = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerView);
 
         menuFab = findViewById(R.id.menuFab);
@@ -58,10 +71,9 @@ public class dashboard extends AppCompatActivity {
         settingsFab = findViewById(R.id.settingsFab);
 
         showMenu();
+        populateFeed();
 
-        arrayList.add(new WrappedFeed(R.drawable.ic_launcher_background, R.drawable.post, "Date", "message"));
-
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(arrayList);
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(feed);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -36,8 +38,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.title.setText(wrappedFeed.getTitle());
         holder.message.setText(wrappedFeed.getMessage());
         holder.profileImage.setImageResource(wrappedFeed.getProfileIcon());
-        holder.postImage.setImageResource(wrappedFeed.getPostImage());
-
+        Picasso.get().load(wrappedFeed.getPostImage()).into(holder.postImage);
     }
 
     @Override

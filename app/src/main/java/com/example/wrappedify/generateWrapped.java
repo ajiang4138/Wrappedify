@@ -27,11 +27,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.wrappedify.firebaseLogin.User;
 import com.example.wrappedify.imageDrawer.imageDrawer;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -85,8 +88,10 @@ public class generateWrapped extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseUser user;
+    FirebaseFirestore firebaseFirestore;
     StorageReference storageRef;
     Uri imageUri;
+    private String fname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +138,7 @@ public class generateWrapped extends AppCompatActivity {
         // Set FireBase authentication
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         showMenu();
 
@@ -533,15 +538,16 @@ public class generateWrapped extends AppCompatActivity {
     }
 
     private void saveImage(Bitmap finalBitmap) {
+        fname = "";
         String root = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES).toString();
-        File myDir = new File(root + "/saved_images");
+        File myDir = new File(root + "/Wrapped!");
         myDir.mkdirs();
         Random generator = new Random();
 
         int n = 10000;
         n = generator.nextInt(n);
-        String fname = "Image-" + n + ".jpg";
+        fname = "Image-" + n + ".jpg";
         File file = new File (myDir, fname);
         // if (file.exists()) file.delete();
         try {
@@ -567,27 +573,29 @@ public class generateWrapped extends AppCompatActivity {
     private void uploadImage() {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy__MM__dd_HH_mm_ss", Locale.ENGLISH);
+        SimpleDateFormat titleBuild = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+        Date date2 = new Date();
         Date date = new Date();
         String fileName = formatter.format(date);
+        String titleName = titleBuild.format(date2);
 
+        firebaseFirestore = FirebaseFirestore.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference(User.currentUserId() + "/" + fileName);
 
         storageRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                WrappedFeed wrappedFeed = new WrappedFeed();
+                        Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
 
-                            }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(generateWrapped.this, "Failed to store.", Toast.LENGTH_SHORT).show();
+                        if (downloadUri.isSuccessful()) {
+                            Toast.makeText(generateWrapped.this, "is Success!", Toast.LENGTH_SHORT).show();
+                            String generatedFilePath = downloadUri.getResult().toString();
+
+                            WrappedFeed wrappedFeed = new WrappedFeed(0, generatedFilePath, titleName, null);
+
+                            firebaseFirestore.collection(user.getUid()).document(fileName).set(wrappedFeed);
+                        }
                     }
                 });
     }
