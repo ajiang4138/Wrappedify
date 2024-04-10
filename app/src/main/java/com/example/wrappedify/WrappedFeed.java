@@ -1,31 +1,39 @@
 package com.example.wrappedify;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class WrappedFeed {
-    private int profileIcon;
-    private int postImage;
+    private String profileIcon;
+    private String postImage;
     private String title;
     private String message;
+    private String timestamp;
 
-    public WrappedFeed(int profileIcon, int postImage, String title, String message) {
+    public WrappedFeed() {}
+
+    public WrappedFeed(String profileIcon, String postImage, String title, String message, String timestamp) {
         this.profileIcon = profileIcon;
         this.postImage = postImage;
         this.title = title;
         this.message = message;
+        this.timestamp = timestamp;
     }
 
-    public int getProfileIcon() {
+    public String getProfileIcon() {
         return profileIcon;
     }
 
-    public void setProfileIcon(int profileIcon) {
+    public void setProfileIcon(String profileIcon) {
         this.profileIcon = profileIcon;
     }
 
-    public int getPostImage() {
+    public String getPostImage() {
         return postImage;
     }
 
-    public void setPostImage(int postImage) {
+    public void setPostImage(String postImage) {
         this.postImage = postImage;
     }
 
@@ -43,5 +51,13 @@ public class WrappedFeed {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }

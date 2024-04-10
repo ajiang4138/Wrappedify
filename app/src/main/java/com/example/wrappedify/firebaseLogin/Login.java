@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import com.example.wrappedify.MainActivity;
 import com.example.wrappedify.R;
 import com.example.wrappedify.dashboard;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,8 +28,10 @@ public class Login extends AppCompatActivity {
     Button loginBtn;
     ProgressBar progressBar;
     TextView textView;
+    TextView forgotPasswordText;
 
     FirebaseAuth mAuth;
+
 
     @Override
     public void onStart() {
@@ -61,6 +62,13 @@ public class Login extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), Registration.class);
             startActivity(intent);
             finish();
+        });
+
+        forgotPasswordText = findViewById(R.id.updateText);
+
+        forgotPasswordText.setOnClickListener((v) -> {
+            Intent intent = new Intent(getApplicationContext(), UpdateAccount.class);
+            startActivity(intent);
         });
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
