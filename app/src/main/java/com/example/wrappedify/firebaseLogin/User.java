@@ -1,5 +1,6 @@
 package com.example.wrappedify.firebaseLogin;
 
+import com.example.wrappedify.WrappedFeed;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -9,12 +10,17 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 public class User {
+    public static final String CLIENT_ID = "ccb7c7bbeb9d455e96a4fbaac95885f1";
+    public static final String REDIRECT_URI = "wrappedify://auth";
+    public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static String accessToken;
     public static ArrayList<String> genres;
     public static ArrayList<String> artistId;
     public static ArrayList<String> trackId;
+    public static String profileImage;
 
-    public static String profilePic;
+    public static String displayName;
+    public static String generatedTerm;
 
     public static String getAccessToken() {
         return accessToken;
@@ -50,6 +56,30 @@ public class User {
 
     public static String currentUserId(){
         return FirebaseAuth.getInstance().getUid();
+    }
+
+    public static String getGeneratedTerm() {
+        return generatedTerm;
+    }
+
+    public static String getProfileImage() {
+        return profileImage;
+    }
+
+    public static void setProfileImage(String profileImage) {
+        User.profileImage = profileImage;
+    }
+
+    public static String getDisplayName() {
+        return displayName;
+    }
+
+    public static void setDisplayName(String displayName) {
+        User.displayName = displayName;
+    }
+
+    public static void setGeneratedTerm(String generatedTerm) {
+        User.generatedTerm = generatedTerm;
     }
 
     public static DocumentReference currentUserDetails(){

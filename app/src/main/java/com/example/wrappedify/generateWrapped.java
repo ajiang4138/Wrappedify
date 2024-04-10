@@ -2,6 +2,7 @@ package com.example.wrappedify;
 
 import static com.example.wrappedify.imageDrawer.imageDrawer.textAsBitmap;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,11 +28,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.wrappedify.firebaseLogin.User;
 import com.example.wrappedify.imageDrawer.imageDrawer;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -63,9 +67,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class generateWrapped extends AppCompatActivity {
-    public static final String CLIENT_ID = "ccb7c7bbeb9d455e96a4fbaac95885f1";
-    public static final String CLIENT_SECRET = "6daf73f2aea74601bd4925a1d1430294";
-    public static final String REDIRECT_URI = "wrappedify://auth";
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
 
@@ -88,8 +89,12 @@ public class generateWrapped extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseUser user;
+    FirebaseFirestore firebaseFirestore;
     StorageReference storageRef;
     Uri imageUri;
+
+    ProgressDialog progressDialog;
+    private String fname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +141,7 @@ public class generateWrapped extends AppCompatActivity {
         // Set FireBase authentication
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         showMenu();
 
@@ -156,12 +161,15 @@ public class generateWrapped extends AppCompatActivity {
 
 
         shortTermFab.setOnClickListener((v) -> {
+            onGetUserProfileClicked();
+
             try {
                 TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
 
+            User.setGeneratedTerm("Short Term");
             getTopArtist("short");
 
             try {
@@ -182,6 +190,15 @@ public class generateWrapped extends AppCompatActivity {
         });
 
         mediumTermFab.setOnClickListener((v) -> {
+            onGetUserProfileClicked();
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            User.setGeneratedTerm("Medium Term");
             getTopArtist("medium");
 
             try {
@@ -202,6 +219,15 @@ public class generateWrapped extends AppCompatActivity {
         });
 
         longTermFab.setOnClickListener((v) -> {
+            onGetUserProfileClicked();
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            User.setGeneratedTerm("Long Term");
             getTopArtist("long");
 
             try {
@@ -241,7 +267,7 @@ public class generateWrapped extends AppCompatActivity {
      */
     public void getTopArtist(String term) {
         if (User.accessToken == null) {
-            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You need to link your account first!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -335,7 +361,7 @@ public class generateWrapped extends AppCompatActivity {
      */
     public void getTopTracks(String term) {
         if (User.getAccessToken() == null) {
-            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You need to link your account first!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -456,7 +482,7 @@ public class generateWrapped extends AppCompatActivity {
      */
     public void getRecommendations() {
         if (User.getAccessToken() == null) {
-            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You need to link your account first!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -521,6 +547,50 @@ public class generateWrapped extends AppCompatActivity {
         });
     }
 
+    public void onGetUserProfileClicked() {
+        if (User.getAccessToken() == null) {
+            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Create a request to get the user profile
+        final Request request = new Request.Builder()
+                .url("https://api.spotify.com/v1/me")
+                .addHeader("Authorization", "Bearer " + User.getAccessToken())
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(generateWrapped.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    JSONArray imageData = jsonObject.getJSONArray("images");
+                    User.setProfileImage(imageData.getJSONObject(0).getString("url"));
+                    User.setDisplayName(jsonObject.getString("display_name"));
+
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(generateWrapped.this, "Failed to parse data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     private void goSave() {
         Bitmap image = imageDrawer.getBitmapFromView(rootContent);
         generateImageView.setImageBitmap(image);
@@ -536,22 +606,21 @@ public class generateWrapped extends AppCompatActivity {
     }
 
     private void saveImage(Bitmap finalBitmap) {
+        fname = "";
         String root = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES).toString();
-        File myDir = new File(root + "/saved_images");
+        File myDir = new File(root + "/Wrapped!");
         myDir.mkdirs();
         Random generator = new Random();
 
         int n = 10000;
         n = generator.nextInt(n);
-        String fname = "Image-" + n + ".jpg";
+        fname = "Image-" + n + ".jpg";
         File file = new File (myDir, fname);
         // if (file.exists()) file.delete();
         try {
             FileOutputStream out = new FileOutputStream(file);
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-            //     Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
             uploadImage();
             out.flush();
             out.close();
@@ -559,8 +628,7 @@ public class generateWrapped extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // Tell the media scanner about the new file so that it is
-        // immediately available to the user.
+        // Tell the media scanner about the new file so that it is immediately available to the user.
         MediaScannerConnection.scanFile(this, new String[]{file.toString()}, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
                     public void onScanCompleted(String path, Uri uri) {
@@ -573,21 +641,35 @@ public class generateWrapped extends AppCompatActivity {
     private void uploadImage() {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy__MM__dd_HH_mm_ss", Locale.ENGLISH);
+        SimpleDateFormat titleBuild = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+        SimpleDateFormat timeStamp = new SimpleDateFormat("yyyy,MM,dd,HH,mm,ss");
         Date date = new Date();
+        Date date2 = new Date();
+        Date date3 = new Date();
         String fileName = formatter.format(date);
+        String titleName = titleBuild.format(date2);
+        String timeName = timeStamp.format(date3);
 
+        firebaseFirestore = FirebaseFirestore.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference(User.currentUserId() + "/" + fileName);
 
         storageRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(generateWrapped.this, "Uploaded to fb", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(generateWrapped.this, "Failed to fb", Toast.LENGTH_SHORT).show();
+                        Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
+
+                        downloadUri.addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+
+                                String generatedFilePath = downloadUri.getResult().toString();
+
+                                WrappedFeed wrappedFeed = new WrappedFeed(User.getProfileImage(), generatedFilePath, User.getDisplayName() + ": " + titleName, User.getGeneratedTerm(), timeName);
+
+                                firebaseFirestore.collection(user.getUid()).document(fileName).set(wrappedFeed);
+                            }
+                        });
                     }
                 });
     }
@@ -645,5 +727,4 @@ public class generateWrapped extends AppCompatActivity {
             mCall.cancel();
         }
     }
-
 }
