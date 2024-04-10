@@ -79,7 +79,7 @@ public class SecurityPrivacy extends AppCompatActivity {
     }
 
     public void unlinkAccount() {
-        User.setAccessToken("");
+        User.setAccessToken(null);
         myWebView.setVisibility(View.VISIBLE);
         myWebView.loadUrl("https://www.spotify.com/us/logout");
 

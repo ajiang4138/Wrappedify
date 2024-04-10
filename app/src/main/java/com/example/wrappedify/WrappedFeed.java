@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class WrappedFeed {
-    private int profileIcon;
+    private String profileIcon;
     private String postImage;
     private String title;
     private String message;
@@ -13,7 +13,7 @@ public class WrappedFeed {
 
     public WrappedFeed() {}
 
-    public WrappedFeed(int profileIcon, String postImage, String title, String message, String timestamp) {
+    public WrappedFeed(String profileIcon, String postImage, String title, String message, String timestamp) {
         this.profileIcon = profileIcon;
         this.postImage = postImage;
         this.title = title;
@@ -21,11 +21,11 @@ public class WrappedFeed {
         this.timestamp = timestamp;
     }
 
-    public int getProfileIcon() {
+    public String getProfileIcon() {
         return profileIcon;
     }
 
-    public void setProfileIcon(int profileIcon) {
+    public void setProfileIcon(String profileIcon) {
         this.profileIcon = profileIcon;
     }
 

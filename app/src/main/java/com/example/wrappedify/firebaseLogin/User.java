@@ -1,5 +1,6 @@
 package com.example.wrappedify.firebaseLogin;
 
+import com.example.wrappedify.WrappedFeed;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -16,7 +17,9 @@ public class User {
     public static ArrayList<String> genres;
     public static ArrayList<String> artistId;
     public static ArrayList<String> trackId;
+    public static String profileImage;
 
+    public static String displayName;
     public static String generatedTerm;
 
     public static String getAccessToken() {
@@ -57,6 +60,22 @@ public class User {
 
     public static String getGeneratedTerm() {
         return generatedTerm;
+    }
+
+    public static String getProfileImage() {
+        return profileImage;
+    }
+
+    public static void setProfileImage(String profileImage) {
+        User.profileImage = profileImage;
+    }
+
+    public static String getDisplayName() {
+        return displayName;
+    }
+
+    public static void setDisplayName(String displayName) {
+        User.displayName = displayName;
     }
 
     public static void setGeneratedTerm(String generatedTerm) {

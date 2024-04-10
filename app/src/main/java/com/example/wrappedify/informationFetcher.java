@@ -95,7 +95,7 @@ public class informationFetcher {
     public static String genreUrl(ArrayList<String> mode) {
         String output = "";
 
-        for (int i = 0; i < mode.size(); i++) {
+        for (int i = 0; i < mode.size() - 1; i++) {
             output += mode.get(i).replace(" ", "+") + "%2C";
         }
 

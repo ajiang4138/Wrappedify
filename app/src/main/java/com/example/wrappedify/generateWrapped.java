@@ -161,10 +161,14 @@ public class generateWrapped extends AppCompatActivity {
 
 
         shortTermFab.setOnClickListener((v) -> {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage("Generating Feed...");
-            progressDialog.show();
+            onGetUserProfileClicked();
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
             User.setGeneratedTerm("Short Term");
             getTopArtist("short");
 
@@ -183,17 +187,17 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getRecommendations();
-
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
         });
 
         mediumTermFab.setOnClickListener((v) -> {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage("Generating Feed...");
-            progressDialog.show();
+            onGetUserProfileClicked();
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
             User.setGeneratedTerm("Medium Term");
             getTopArtist("medium");
 
@@ -212,16 +216,17 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getRecommendations();
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
         });
 
         longTermFab.setOnClickListener((v) -> {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage("Generating Feed...");
-            progressDialog.show();
+            onGetUserProfileClicked();
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
             User.setGeneratedTerm("Long Term");
             getTopArtist("long");
 
@@ -240,9 +245,6 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getRecommendations();
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
         });
     }
 
@@ -545,6 +547,50 @@ public class generateWrapped extends AppCompatActivity {
         });
     }
 
+    public void onGetUserProfileClicked() {
+        if (User.getAccessToken() == null) {
+            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Create a request to get the user profile
+        final Request request = new Request.Builder()
+                .url("https://api.spotify.com/v1/me")
+                .addHeader("Authorization", "Bearer " + User.getAccessToken())
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(generateWrapped.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    JSONArray imageData = jsonObject.getJSONArray("images");
+                    User.setProfileImage(imageData.getJSONObject(0).getString("url"));
+                    User.setDisplayName(jsonObject.getString("display_name"));
+
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(generateWrapped.this, "Failed to parse data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     private void goSave() {
         Bitmap image = imageDrawer.getBitmapFromView(rootContent);
         generateImageView.setImageBitmap(image);
@@ -619,7 +665,7 @@ public class generateWrapped extends AppCompatActivity {
 
                                 String generatedFilePath = downloadUri.getResult().toString();
 
-                                WrappedFeed wrappedFeed = new WrappedFeed(0, generatedFilePath, titleName, User.getGeneratedTerm(), timeName);
+                                WrappedFeed wrappedFeed = new WrappedFeed(User.getProfileImage(), generatedFilePath, User.getDisplayName() + ": " + titleName, User.getGeneratedTerm(), timeName);
 
                                 firebaseFirestore.collection(user.getUid()).document(fileName).set(wrappedFeed);
                             }

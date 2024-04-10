@@ -40,7 +40,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         holder.title.setText(wrappedFeed.getTitle());
         holder.message.setText(wrappedFeed.getMessage());
-        holder.profileImage.setImageResource(wrappedFeed.getProfileIcon());
+        Picasso.get().load(wrappedFeed.getProfileIcon()).into(holder.profileImage);
         Picasso.get().load(wrappedFeed.getPostImage()).into(holder.postImage);
     }
 
