@@ -71,13 +71,6 @@ public class dashboard extends AppCompatActivity {
             getToken();
         }
 
-        /*
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage("Generating Feed...");
-            progressDialog.show();
-         */
-
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -190,7 +183,7 @@ public class dashboard extends AppCompatActivity {
 
     public void getToken() {
         final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN);
-        AuthorizationClient.openLoginActivity(dashboard.this, AUTH_TOKEN_REQUEST_CODE, request);
+        AuthorizationClient.openLoginActivity(dashboard.this, User.AUTH_TOKEN_REQUEST_CODE, request);
     }
 
     /**
@@ -202,13 +195,13 @@ public class dashboard extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, data);
 
-        if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
+        if (User.AUTH_TOKEN_REQUEST_CODE == requestCode) {
             User.setAccessToken(response.getAccessToken());
         }
     }
 
     private Uri getRedirectUri() {
-        return Uri.parse(REDIRECT_URI);
+        return Uri.parse(User.REDIRECT_URI);
     }
 
     /**
@@ -218,7 +211,7 @@ public class dashboard extends AppCompatActivity {
      * @return the authentication request
      */
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
-        return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
+        return new AuthorizationRequest.Builder(User.CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
                 .setScopes(new String[] { "user-read-email", "user-top-read" }) // <--- Change the scope of your requested token here
                 .setCampaign("your-campaign-token")
