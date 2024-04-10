@@ -75,7 +75,7 @@ public class informationFetcher {
     public static String artistIdUrl(ArrayList<String> artistId) {
         String output = "";
 
-        for (int i = 0; i < artistId.size(); i++) {
+        for (int i = 0; i < artistId.size() - 2; i++) {
             output += artistId.get(i) + "%2C";
         }
 
@@ -95,7 +95,7 @@ public class informationFetcher {
     public static String genreUrl(ArrayList<String> mode) {
         String output = "";
 
-        for (int i = 0; i < mode.size() - 1; i++) {
+        for (int i = 0; i < mode.size() - 2; i++) {
             output += mode.get(i).replace(" ", "+") + "%2C";
         }
 
