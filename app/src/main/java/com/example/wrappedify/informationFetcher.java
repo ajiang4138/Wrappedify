@@ -45,7 +45,7 @@ public class informationFetcher {
     public static String genresText(ArrayList<String> mode) {
         String output = "Top Genres: ";
 
-        for (int i = 0; i < mode.size(); i++) {
+        for (int i = 0; i < mode.size() - 2; i++) {
             output += mode.get(i) + ", ";
         }
 
