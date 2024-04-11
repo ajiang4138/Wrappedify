@@ -5,11 +5,19 @@
     android:layout_margin="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <TextView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="                   "
+        android:background="@color/gray"
+        android:layout_marginBottom="15dp" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/c1Top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
@@ -22,6 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
+            android:textColor="?android:textColorPrimary"
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -34,6 +43,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:textColor="?android:textColorPrimary"
             android:id="@+id/message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -46,6 +56,7 @@
             app:layout_constraintTop_toBottomOf="@id/title"/>
 
         <TextView
+            android:textColor="?android:textColorPrimary"
             android:id="@+id/menu"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -65,42 +76,6 @@
         android:layout_height="750dp"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintTop_toBottomOf="@id/c1Top"/>
-
-    <ImageView
-        android:id="@+id/ivLike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/baseline_favorite_24"
-        app:layout_constraintTop_toBottomOf="@id/ivPost"
-        android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <ImageView
-        android:id="@+id/ivComment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/baseline_comment_24"
-        app:layout_constraintTop_toBottomOf="@id/ivPost"
-        android:padding="10dp"
-        app:layout_constraintStart_toEndOf="@id/ivLike"/>
-
-    <ImageView
-        android:id="@+id/ivShare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/baseline_share_24"
-        app:layout_constraintTop_toBottomOf="@id/ivPost"
-        android:padding="10dp"
-        app:layout_constraintStart_toEndOf="@id/ivComment"/>
-
-    <ImageView
-        android:id="@+id/ivBookmark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/baseline_bookmark_24"
-        app:layout_constraintTop_toBottomOf="@id/ivPost"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

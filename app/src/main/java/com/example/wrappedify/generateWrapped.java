@@ -490,7 +490,7 @@ public class generateWrapped extends AppCompatActivity {
         String genreUrl = informationFetcher.genreUrl(User.getGenres());
 
         String url =
-                "https://api.spotify.com/v1/recommendations?limit=5&seed_artists=" + artistIdUrl
+                "https://api.spotify.com/v1/recommendations?limit=3&seed_artists=" + artistIdUrl
                             + "&seed_genres=" + genreUrl;
 
         // get request

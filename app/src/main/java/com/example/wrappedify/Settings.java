@@ -5,6 +5,7 @@ import static java.security.AccessController.getContext;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.example.wrappedify.settingsPage.SecurityPrivacy;
@@ -28,6 +30,7 @@ import com.example.wrappedify.firebaseLogin.User;
 import com.example.wrappedify.firebaseLogin.UserModel;
 
 import com.example.wrappedify.settingsPage.deleteAccount;
+import com.example.wrappedify.settingsPage.editPassEmailQuery;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,6 +46,10 @@ public class Settings extends AppCompatActivity {
     Uri selectedImageUri;
     ImageView profilePic;
     UserModel currentUserModel;
+
+    private static final String NIGHT_MODE = "night_mode";
+    private SwitchCompat nightModeSwitch;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,12 +72,31 @@ public class Settings extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-        TextView username = (TextView) findViewById(R.id.username);
-        Button editProfileBtn = (Button) findViewById(R.id.editProfileBtn);
-        SwitchCompat nightToggle = (SwitchCompat) findViewById(R.id.nightModeSwitch);
-        ImageView backBtn = (ImageView) findViewById(R.id.backBtn);
+        TextView username = findViewById(R.id.username);
+        Button editProfileBtn = findViewById(R.id.editProfileBtn);
+        ImageView backBtn = findViewById(R.id.backBtn);
         RelativeLayout securityAndPrivacy = findViewById(R.id.securityAndPrivacy);
         profilePic = findViewById(R.id.profile_pic);
+
+        // Night Mode
+        nightModeSwitch = findViewById(R.id.nightModeSwitch);
+        sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
+
+        nightModeSwitch.setChecked(sharedPreferences.getBoolean(NIGHT_MODE, false));
+
+        nightModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(NIGHT_MODE, isChecked);
+            editor.apply();
+
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+
+            else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        });
 
         username.setText(user.getEmail());
 
@@ -112,15 +138,12 @@ public class Settings extends AppCompatActivity {
 
 
     public void goEditProfile() {
-        return;
+        Intent intent = new Intent(getApplicationContext(), editPassEmailQuery.class);
+        startActivity(intent);
     }
 
     public void goSecurity() {
         Intent intent = new Intent(getApplicationContext(), SecurityPrivacy.class);
-        startActivity(intent);
-    }
-    public void goEditAccount() {
-        Intent intent = new Intent(getApplicationContext(), deleteAccount.class);
         startActivity(intent);
     }
 

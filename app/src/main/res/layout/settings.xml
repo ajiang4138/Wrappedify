@@ -48,12 +48,12 @@
                 android:src="@drawable/profile_icon" />
 
             <TextView
+                android:textColor="?android:textColorPrimary"
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:textColor="#FFFFFF"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -76,7 +76,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/round_back_white10_20"
+                style="@style/linearBgColor"
                 android:orientation="vertical"
                 android:padding="15dp">
 
@@ -94,6 +94,7 @@
                         android:src="@drawable/night_mode_icon" />
 
                     <TextView
+                        android:textColor="?android:textColorPrimary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -128,6 +129,7 @@
                         android:src="@drawable/notification_icon" />
 
                     <TextView
+                        android:textColor="?android:textColorPrimary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -161,6 +163,7 @@
                         android:src="@drawable/privacy_icon" />
 
                     <TextView
+                        android:textColor="?android:textColorPrimary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -188,7 +191,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/round_back_white10_20"
+                style="@style/linearBgColor"
                 android:orientation="vertical"
                 android:padding="15dp">
 
@@ -206,6 +209,7 @@
                         android:src="@drawable/security_icon" />
 
                     <TextView
+                        android:textColor="?android:textColorPrimary"
                         android:id="@+id/securityTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

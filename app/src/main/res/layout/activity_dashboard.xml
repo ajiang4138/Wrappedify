@@ -64,7 +64,7 @@
             android:id="@+id/settingsFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/baseline_menu_24"
+            android:src="@drawable/ic_settings_icon"
             android:layout_margin="5dp"
             app:backgroundTint="@color/spotify_green"
             app:fabCustomSize="45dp"/>

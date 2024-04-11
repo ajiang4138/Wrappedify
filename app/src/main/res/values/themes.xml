@@ -6,8 +6,10 @@
         <item name="android:textColor">@color/spotify_black</item>
         <item name="android:textSize">16dp</item>
         <item name="android:fontFamily">@font/circular</item>
-
     </style>
+
+    <style name="backgroundColor"><item name="android:background">@color/white</item></style>
+    <style name="linearBgColor"><item name="android:background">@drawable/round_back_gray10_20</item></style>
 
     <style name="Widget.Wrappedify.Button" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/spotify_green</item>
@@ -16,19 +18,19 @@
 
     <style name="nightModeSwitch" parent="Theme.AppCompat.Light">
         <item name="colorControlActivated">@color/spotify_green</item>
-        <item name="colorSwitchThumbNormal">#FFFFFF</item>
+        <item name="colorSwitchThumbNormal">@color/spotify_green</item>
         <item name="android:colorForeground">#99FFFFFF</item>
     </style>
 
     <style name="notificationSwitch" parent="Theme.AppCompat.Light">
         <item name="colorControlActivated">@color/spotify_green</item>
-        <item name="colorSwitchThumbNormal">#FFFFFF</item>
+        <item name="colorSwitchThumbNormal">@color/spotify_green</item>
         <item name="android:colorForeground">#99FFFFFF</item>
     </style>
 
     <style name="privateAccountSwitch" parent="Theme.AppCompat.Light">
         <item name="colorControlActivated">@color/spotify_green</item>
-        <item name="colorSwitchThumbNormal">#FFFFFF</item>
+        <item name="colorSwitchThumbNormal">@color/spotify_green</item>
         <item name="android:colorForeground">#99FFFFFF</item>
     </style>
 
