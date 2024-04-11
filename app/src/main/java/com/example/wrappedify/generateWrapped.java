@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,7 +75,7 @@ public class generateWrapped extends AppCompatActivity {
     private Call mCall;
 
     // Initialize views
-    private ConstraintLayout rootContent;
+    private ConstraintLayout rootContent, backgroundContent;
     private TextView textViewSong1, textViewSong2, textViewSong3, textViewGenres, textViewAi, textViewRecommendation;
     private TextView textViewArtist1, textViewArtist2, textViewArtist3, topFiveArtists;
     private ImageView imageView1, imageView2, imageView3, artistView, generateImageView;
@@ -82,8 +83,10 @@ public class generateWrapped extends AppCompatActivity {
     // Initialize buttons
     private Button backBtn, saveBtn;
     private FloatingActionButton menuFab, shortTermFab, mediumTermFab, longTermFab;
+    private FloatingActionButton themesFab, defaultFab, christmasFab, halloweenFab, newyearsFab, stpatFab, valentinesFab;
 
     boolean menuOpen = false;
+    boolean themeOpen = false;
     float translationYaxis = 100f;
     OvershootInterpolator interpolator = new OvershootInterpolator();
 
@@ -92,8 +95,6 @@ public class generateWrapped extends AppCompatActivity {
     FirebaseFirestore firebaseFirestore;
     StorageReference storageRef;
     Uri imageUri;
-
-    ProgressDialog progressDialog;
     private String fname;
 
     @Override
@@ -102,6 +103,7 @@ public class generateWrapped extends AppCompatActivity {
         setContentView(R.layout.wrapped);
 
         // Set views
+        backgroundContent = findViewById(R.id.root_content);
         rootContent = findViewById(R.id.root_content2);
 
         textViewSong1 = findViewById(R.id.textViewSongOne);
@@ -138,12 +140,39 @@ public class generateWrapped extends AppCompatActivity {
         longTermFab = findViewById(R.id.long_term_fab);
         longTermFab.setImageBitmap(textAsBitmap("Long", 40, Color.WHITE));
 
+        themesFab = findViewById(R.id.themesFab);
+
         // Set FireBase authentication
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         showMenu();
+        showThemeMenu();
+
+        defaultFab.setOnClickListener((v) -> {
+            rootContent.setBackgroundResource(0);
+        });
+
+        christmasFab.setOnClickListener((v) -> {
+            rootContent.setBackground(getResources().getDrawable(R.drawable.christmas_theme));
+        });
+
+        halloweenFab.setOnClickListener((v) -> {
+            rootContent.setBackground(getResources().getDrawable(R.drawable.halloween_theme));
+        });
+
+        newyearsFab.setOnClickListener((v) -> {
+            rootContent.setBackground(getResources().getDrawable(R.drawable.new_years_theme));
+        });
+
+        stpatFab.setOnClickListener((v) -> {
+            rootContent.setBackground(getResources().getDrawable(R.drawable.st_pat_theme));
+        });
+
+        valentinesFab.setOnClickListener((v) -> {
+            rootContent.setBackground(getResources().getDrawable(R.drawable.valentines_theme));
+        });
 
         backBtn.setOnClickListener((v) -> {
             Intent intent = new Intent(getApplicationContext(), dashboard.class);
@@ -716,6 +745,65 @@ public class generateWrapped extends AppCompatActivity {
         shortTermFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
         mediumTermFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
         longTermFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
+    }
+
+    private void showThemeMenu() {
+        themesFab = findViewById(R.id.themesFab);
+        defaultFab = findViewById(R.id.default_fab);
+        christmasFab = findViewById(R.id.christmas_fab);
+        halloweenFab = findViewById(R.id.halloween_fab);
+        newyearsFab = findViewById(R.id.newyears_fab);
+        stpatFab = findViewById(R.id.stpatrick_fab);
+        valentinesFab = findViewById(R.id.valentines_fab);
+
+        defaultFab.setAlpha(0f);
+        christmasFab.setAlpha(0f);
+        halloweenFab.setAlpha(0f);
+        newyearsFab.setAlpha(0f);
+        stpatFab.setAlpha(0f);
+        valentinesFab.setAlpha(0f);
+
+        defaultFab.setTranslationY(translationYaxis);
+        christmasFab.setTranslationY(translationYaxis);
+        halloweenFab.setTranslationY(translationYaxis);
+        newyearsFab.setTranslationY(translationYaxis);
+        stpatFab.setTranslationY(translationYaxis);
+        valentinesFab.setTranslationY(translationYaxis);
+
+        themesFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (themeOpen) {
+                    closeTheme();
+                }
+
+                else {
+                    openTheme();
+                }
+            }
+        });
+    }
+
+    private void openTheme() {
+        themeOpen = !themeOpen;
+
+        defaultFab.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
+        christmasFab.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
+        halloweenFab.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
+        newyearsFab.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
+        stpatFab.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
+        valentinesFab.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
+    }
+
+    private void closeTheme() {
+        themeOpen = !themeOpen;
+
+        defaultFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
+        christmasFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
+        halloweenFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
+        newyearsFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
+        stpatFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
+        valentinesFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
     }
 
     private void setTextAsync(final String text, TextView textView) {
