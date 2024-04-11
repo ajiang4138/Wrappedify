@@ -45,7 +45,7 @@ public class informationFetcher {
     public static String genresText(ArrayList<String> mode) {
         String output = "Top Genres: ";
 
-        for (int i = 0; i < mode.size() - 2; i++) {
+        for (int i = 0; i < mode.size(); i++) {
             output += mode.get(i) + ", ";
         }
 
@@ -75,7 +75,7 @@ public class informationFetcher {
     public static String artistIdUrl(ArrayList<String> artistId) {
         String output = "";
 
-        for (int i = 0; i < artistId.size() - 2; i++) {
+        for (int i = 0; i < artistId.size() - 1; i++) {
             output += artistId.get(i) + "%2C";
         }
 

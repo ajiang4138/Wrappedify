@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,24 +17,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Wrappedify"
         tools:targetApi="31">
-
+        <activity
+            android:name=".settingsPage.editPassword"
+            android:exported="false" />
+        <activity
+            android:name=".settingsPage.editEmail"
+            android:exported="false" />
+        <activity
+            android:name=".settingsPage.editPassEmailQuery"
+            android:exported="false" />
         <activity
             android:name=".generateWrapped"
             android:exported="false" />
-
         <activity
             android:name=".settingsPage.deleteAccount"
             android:exported="false" />
-
         <activity
             android:name=".dashboard"
             android:exported="false" />
-
         <activity
             android:name=".firebaseLogin.Registration"
             android:exported="false"
             android:theme="@style/Theme.Wrappedify" />
-
         <activity
             android:name=".firebaseLogin.Login"
             android:exported="true"
@@ -49,28 +53,18 @@
             android:name=".firebaseLogin.UpdateAccount"
             android:exported="true"
             android:theme="@style/Theme.Wrappedify" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Wrappedify">
-
-        </activity>
-
+            android:theme="@style/Theme.Wrappedify" />
         <activity
             android:name=".Settings"
             android:exported="true"
-            android:theme="@style/Theme.Wrappedify">
-
-        </activity>
-
+            android:theme="@style/Theme.Wrappedify" />
         <activity
             android:name=".settingsPage.SecurityPrivacy"
             android:exported="true"
-            android:theme="@style/Theme.Wrappedify">
-
-        </activity>
-
+            android:theme="@style/Theme.Wrappedify" />
     </application>
 
 </manifest>
