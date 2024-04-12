@@ -18,7 +18,8 @@
             android:id="@+id/backBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:padding="14dp" />
+            android:padding="14dp"
+            android:contentDescription="Back Button" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,7 +47,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginBottom="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginEnd="30dp"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -58,7 +59,8 @@
             android:src="@drawable/baseline_add_24"
             android:layout_margin="5dp"
             app:backgroundTint="@color/spotify_green"
-            app:fabCustomSize="45dp"/>
+            app:fabCustomSize="45dp"
+            android:contentDescription="GenerateWrapped Page FAB" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/settingsFab"
@@ -67,7 +69,8 @@
             android:src="@drawable/ic_settings_icon"
             android:layout_margin="5dp"
             app:backgroundTint="@color/spotify_green"
-            app:fabCustomSize="45dp"/>
+            app:fabCustomSize="45dp"
+            android:contentDescription="Settings FAB" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/menuFab"
@@ -76,7 +79,8 @@
             android:src="@drawable/baseline_home_24"
             android:layout_margin="5dp"
             app:backgroundTint="@color/spotify_green"
-            app:fabSize="normal"/>
+            app:fabSize="normal"
+            android:contentDescription="FAB Head" />
 
     </LinearLayout>
 
