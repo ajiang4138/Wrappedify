@@ -604,7 +604,9 @@ public class generateWrapped extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray imageData = jsonObject.getJSONArray("images");
-                    User.setProfileImage(imageData.getJSONObject(0).getString("url"));
+                    if (imageData.length() != 0) {
+                        User.setProfileImage(imageData.getJSONObject(0).getString("url"));
+                    }
                     User.setDisplayName(jsonObject.getString("display_name"));
 
                 } catch (JSONException e) {
