@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Wrappedify"
         tools:targetApi="31">
         <activity
+            android:name=".NotificationActvity"
+            android:exported="false" />
+        <activity
             android:name=".settingsPage.editPassword"
             android:exported="false" />
         <activity
