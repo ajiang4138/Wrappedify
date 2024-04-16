@@ -134,11 +134,11 @@ public class generateWrapped extends AppCompatActivity {
 
         menuFab = findViewById(R.id.menuFab);
         shortTermFab = findViewById(R.id.short_term_fab);
-        shortTermFab.setImageBitmap(textAsBitmap("Short", 40, Color.WHITE));
+        shortTermFab.setImageBitmap(textAsBitmap("Week", 40, Color.WHITE));
         mediumTermFab = findViewById(R.id.medium_term_fab);
-        mediumTermFab.setImageBitmap(textAsBitmap("Med", 40, Color.WHITE));
+        mediumTermFab.setImageBitmap(textAsBitmap("Month", 40, Color.WHITE));
         longTermFab = findViewById(R.id.long_term_fab);
-        longTermFab.setImageBitmap(textAsBitmap("Long", 40, Color.WHITE));
+        longTermFab.setImageBitmap(textAsBitmap("Year", 40, Color.WHITE));
 
         themesFab = findViewById(R.id.themesFab);
 
@@ -653,7 +653,9 @@ public class generateWrapped extends AppCompatActivity {
             FileOutputStream out = new FileOutputStream(file);
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             uploadImage();
-            uploadImagePublic();
+            if (!User.isPrivateAcc()) {
+                uploadImagePublic();
+            }
             out.flush();
             out.close();
 

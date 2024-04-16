@@ -83,7 +83,13 @@ public class dashboard extends AppCompatActivity {
         recyclerAdapter = new RecyclerAdapter(dashboard.this, feed);
         recyclerView.setAdapter(recyclerAdapter);
 
-        populateFeedPublic();
+        if (!User.isPrivateAcc()) {
+            populateFeedPublic();
+        }
+
+        else {
+            populateFeed();
+        }
 
         generateWrappedFab.setOnClickListener((v) -> {
             Intent intent = new Intent(getApplicationContext(), generateWrapped.class);
@@ -94,6 +100,7 @@ public class dashboard extends AppCompatActivity {
         settingsFab.setOnClickListener((v) -> {
             Intent intent = new Intent(getApplicationContext(), Settings.class);
             startActivity(intent);
+            finish();
         });
     }
 
