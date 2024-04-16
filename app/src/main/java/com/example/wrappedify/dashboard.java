@@ -83,7 +83,7 @@ public class dashboard extends AppCompatActivity {
         recyclerAdapter = new RecyclerAdapter(dashboard.this, feed);
         recyclerView.setAdapter(recyclerAdapter);
 
-        populateFeed();
+        populateFeedPublic();
 
         generateWrappedFab.setOnClickListener((v) -> {
             Intent intent = new Intent(getApplicationContext(), generateWrapped.class);
@@ -127,6 +127,41 @@ public class dashboard extends AppCompatActivity {
                              */
 
                          }
+
+                    }
+                });
+    }
+
+    private void populateFeedPublic() {
+
+        firebaseFirestore.collection("Public Storage/").orderBy("timestamp", Query.Direction.ASCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                        if (error != null) {
+                            /*
+                            if (progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
+                             */
+                            Log.e("Firestore Error", error.getMessage());
+                            return;
+                        }
+
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                feed.add(0, dc.getDocument().toObject(WrappedFeed.class));
+                            }
+
+                            recyclerAdapter.notifyDataSetChanged();
+                            /*
+                            if (progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
+                             */
+
+                        }
 
                     }
                 });

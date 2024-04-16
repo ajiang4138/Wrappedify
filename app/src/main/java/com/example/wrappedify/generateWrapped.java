@@ -653,6 +653,7 @@ public class generateWrapped extends AppCompatActivity {
             FileOutputStream out = new FileOutputStream(file);
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             uploadImage();
+            uploadImagePublic();
             out.flush();
             out.close();
 
@@ -699,6 +700,42 @@ public class generateWrapped extends AppCompatActivity {
                                 WrappedFeed wrappedFeed = new WrappedFeed(User.getProfileImage(), generatedFilePath, User.getDisplayName() + ": " + titleName, User.getGeneratedTerm(), timeName);
 
                                 firebaseFirestore.collection(user.getUid()).document(fileName).set(wrappedFeed);
+                            }
+                        });
+                    }
+                });
+    }
+
+    private void uploadImagePublic() {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy__MM__dd_HH_mm_ss", Locale.ENGLISH);
+        SimpleDateFormat titleBuild = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+        SimpleDateFormat timeStamp = new SimpleDateFormat("yyyy,MM,dd,HH,mm,ss");
+        Date date = new Date();
+        Date date2 = new Date();
+        Date date3 = new Date();
+        String fileName = formatter.format(date);
+        String titleName = titleBuild.format(date2);
+        String timeName = timeStamp.format(date3);
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        storageRef = FirebaseStorage.getInstance().getReference("Public Storage/" + fileName);
+
+        storageRef.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
+
+                        downloadUri.addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+
+                                String generatedFilePath = downloadUri.getResult().toString();
+
+                                WrappedFeed wrappedFeed = new WrappedFeed(User.getProfileImage(), generatedFilePath, User.getDisplayName() + ": " + titleName, User.getGeneratedTerm(), timeName);
+
+                                firebaseFirestore.collection("Public Storage").document(fileName).set(wrappedFeed);
                             }
                         });
                     }
