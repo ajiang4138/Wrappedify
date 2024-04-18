@@ -38,6 +38,7 @@
         android:layout_height="wrap_content" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
+
             android:id="@+id/root_content2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -331,6 +332,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="invisible"
         android:id="@+id/customFab2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

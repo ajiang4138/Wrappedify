@@ -45,6 +45,7 @@ import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 import com.squareup.picasso.Picasso;
 
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -542,6 +543,7 @@ public class generateWrapped extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
+                    ArrayList<String> recommendedUrl = new ArrayList<>();
                     String output = "Recommended Songs: \n";
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray trackList = jsonObject.getJSONArray("tracks");
@@ -552,6 +554,10 @@ public class generateWrapped extends AppCompatActivity {
                         ArrayList<String> artistNames = new ArrayList<>();
                         JSONObject trackInfo = trackList.getJSONObject(i);
                         JSONArray artistInfo = trackInfo.getJSONArray("artists");
+
+                        JSONObject albumInfo = trackInfo.getJSONObject("album");
+                        JSONArray imageInfo = albumInfo.getJSONArray("images");
+                        recommendedUrl.add(imageInfo.getJSONObject(0).getString("url"));
 
                         for (int j = 0; j < artistInfo.length(); j++) {
                             JSONObject artist = artistInfo.getJSONObject(j);
