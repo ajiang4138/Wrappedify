@@ -32,220 +32,227 @@
         </TextView>
     </RelativeLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/root_content2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/backgroundColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+    <ScrollView
         app:layout_constraintTop_toBottomOf="@id/topBar"
-        app:layout_constraintVertical_bias="0.0">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/wrappedTitle"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/root_content2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Your Spotify Wrapped"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="25dp"
+            style="@style/backgroundColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topBar"
+            app:layout_constraintVertical_bias="0.0">
 
-        <TextView
-            android:id="@+id/numberOne"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="40dp"
-            app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
-            app:layout_constraintTop_toTopOf="@id/imageViewSongOne" />
+            <TextView
+                android:id="@+id/wrappedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Your Spotify Wrapped"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="25dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageViewSongOne"
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:layout_margin="10dp"
-            app:layout_constraintLeft_toRightOf="@id/numberOne"
-            app:layout_constraintTop_toBottomOf="@id/wrappedTitle"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            <TextView
+                android:id="@+id/numberOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="40dp"
+                app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
+                app:layout_constraintTop_toTopOf="@id/imageViewSongOne" />
 
-        <TextView
-            android:id="@+id/textViewSongOne"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text=""
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintLeft_toRightOf="@id/imageViewSongOne"
-            app:layout_constraintTop_toTopOf="@id/imageViewSongOne" />
+            <ImageView
+                android:id="@+id/imageViewSongOne"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:layout_margin="10dp"
+                app:layout_constraintLeft_toRightOf="@id/numberOne"
+                app:layout_constraintTop_toBottomOf="@id/wrappedTitle"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-        <TextView
-            android:id="@+id/textViewArtistOne"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintLeft_toRightOf="@id/imageViewSongOne"
-            app:layout_constraintTop_toBottomOf="@id/textViewSongOne" />
+            <TextView
+                android:id="@+id/textViewSongOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text=""
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintLeft_toRightOf="@id/imageViewSongOne"
+                app:layout_constraintTop_toTopOf="@id/imageViewSongOne" />
 
-        <TextView
-            android:id="@+id/numberTwo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="40dp"
-            app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
-            app:layout_constraintTop_toTopOf="@id/imageViewSongTwo" />
+            <TextView
+                android:id="@+id/textViewArtistOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintLeft_toRightOf="@id/imageViewSongOne"
+                app:layout_constraintTop_toBottomOf="@id/textViewSongOne" />
 
-        <ImageView
-            android:id="@+id/imageViewSongTwo"
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="@id/imageViewSongOne"
-            app:layout_constraintTop_toBottomOf="@id/imageViewSongOne"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            <TextView
+                android:id="@+id/numberTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="40dp"
+                app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
+                app:layout_constraintTop_toTopOf="@id/imageViewSongTwo" />
 
-        <TextView
-            android:id="@+id/textViewSongTwo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintLeft_toRightOf="@id/imageViewSongTwo"
-            app:layout_constraintTop_toTopOf="@id/imageViewSongTwo" />
+            <ImageView
+                android:id="@+id/imageViewSongTwo"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="@id/imageViewSongOne"
+                app:layout_constraintTop_toBottomOf="@id/imageViewSongOne"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-        <TextView
-            android:id="@+id/textViewArtistTwo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintLeft_toRightOf="@id/imageViewSongTwo"
-            app:layout_constraintTop_toBottomOf="@id/textViewSongTwo" />
+            <TextView
+                android:id="@+id/textViewSongTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintLeft_toRightOf="@id/imageViewSongTwo"
+                app:layout_constraintTop_toTopOf="@id/imageViewSongTwo" />
 
-        <TextView
-            android:id="@+id/numberThree"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="40dp"
-            app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
-            app:layout_constraintTop_toTopOf="@id/imageViewSongThree" />
+            <TextView
+                android:id="@+id/textViewArtistTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintLeft_toRightOf="@id/imageViewSongTwo"
+                app:layout_constraintTop_toBottomOf="@id/textViewSongTwo" />
 
-        <ImageView
-            android:id="@+id/imageViewSongThree"
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="@id/imageViewSongOne"
-            app:layout_constraintTop_toBottomOf="@id/imageViewSongTwo"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            <TextView
+                android:id="@+id/numberThree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="40dp"
+                app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
+                app:layout_constraintTop_toTopOf="@id/imageViewSongThree" />
 
-        <TextView
-            android:id="@+id/textViewSongThree"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintLeft_toRightOf="@id/imageViewSongThree"
-            app:layout_constraintTop_toTopOf="@id/imageViewSongThree" />
+            <ImageView
+                android:id="@+id/imageViewSongThree"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="@id/imageViewSongOne"
+                app:layout_constraintTop_toBottomOf="@id/imageViewSongTwo"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-        <TextView
-            android:id="@+id/textViewArtistThree"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintLeft_toRightOf="@id/imageViewSongThree"
-            app:layout_constraintTop_toBottomOf="@id/textViewSongThree" />
+            <TextView
+                android:id="@+id/textViewSongThree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintLeft_toRightOf="@id/imageViewSongThree"
+                app:layout_constraintTop_toTopOf="@id/imageViewSongThree" />
 
-        <TextView
-            android:id="@+id/letterT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="T"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="24dp"
-            app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
-            app:layout_constraintTop_toTopOf="@id/artistImage" />
+            <TextView
+                android:id="@+id/textViewArtistThree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintLeft_toRightOf="@id/imageViewSongThree"
+                app:layout_constraintTop_toBottomOf="@id/textViewSongThree" />
 
-        <TextView
-            android:id="@+id/letterO"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="O"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="24dp"
-            app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
-            app:layout_constraintTop_toBottomOf="@id/letterT" />
+            <TextView
+                android:id="@+id/letterT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="T"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="24dp"
+                app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
+                app:layout_constraintTop_toTopOf="@id/artistImage" />
 
-        <TextView
-            android:id="@+id/letterP"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="P"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="24dp"
-            app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
-            app:layout_constraintTop_toBottomOf="@id/letterO" />
+            <TextView
+                android:id="@+id/letterO"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="O"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="24dp"
+                app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
+                app:layout_constraintTop_toBottomOf="@id/letterT" />
 
-        <ImageView
-            android:id="@+id/artistImage"
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="@id/imageViewSongTwo"
-            app:layout_constraintTop_toBottomOf="@id/imageViewSongThree"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            <TextView
+                android:id="@+id/letterP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="P"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="24dp"
+                app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
+                app:layout_constraintTop_toBottomOf="@id/letterO" />
 
-        <TextView
-            android:id="@+id/topFiveArtists"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintLeft_toRightOf="@id/artistImage"
-            app:layout_constraintTop_toTopOf="@id/artistImage" />
+            <ImageView
+                android:id="@+id/artistImage"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="@id/imageViewSongTwo"
+                app:layout_constraintTop_toBottomOf="@id/imageViewSongThree"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-        <TextView
-            android:id="@+id/TextViewGenres"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
-            app:layout_constraintTop_toBottomOf="@id/artistImage" />
+            <TextView
+                android:id="@+id/topFiveArtists"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintLeft_toRightOf="@id/artistImage"
+                app:layout_constraintTop_toTopOf="@id/artistImage" />
 
-        <TextView
-            android:id="@+id/TextViewRecommendations"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text=""
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
-            app:layout_constraintTop_toBottomOf="@id/TextViewGenres" />
+            <TextView
+                android:id="@+id/TextViewGenres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
+                app:layout_constraintTop_toBottomOf="@id/artistImage" />
 
-        <TextView
-            android:id="@+id/TextViewAI"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text=""
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
-            app:layout_constraintTop_toBottomOf="@id/TextViewRecommendations" />
+            <TextView
+                android:id="@+id/TextViewRecommendations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text=""
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
+                app:layout_constraintTop_toBottomOf="@id/TextViewGenres" />
+
+            <TextView
+                android:id="@+id/TextViewAI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text=""
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintLeft_toLeftOf="@id/wrappedTitle"
+                app:layout_constraintTop_toBottomOf="@id/TextViewRecommendations" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <ImageView
         android:id="@+id/generateImageView"
