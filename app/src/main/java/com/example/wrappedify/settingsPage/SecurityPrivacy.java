@@ -7,6 +7,7 @@ import static com.example.wrappedify.firebaseLogin.User.REDIRECT_URI;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -51,6 +52,7 @@ public class SecurityPrivacy extends AppCompatActivity {
 
         logoutBtn.setOnClickListener((v) -> {
             User.setAccessToken(null);
+            Log.d("Logout", "Access token: " + User.getAccessToken());
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
