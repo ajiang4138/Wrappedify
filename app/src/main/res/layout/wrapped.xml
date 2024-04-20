@@ -32,6 +32,19 @@
         </TextView>
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:max="100"
+        android:scaleY="4"
+        android:backgroundTint="@color/spotify_black"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        android:indeterminateTint="#1a09d6"
+        android:layout_marginTop="-7dp"/>
+
     <ScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
@@ -251,7 +264,6 @@
                 app:layout_constraintLeft_toRightOf="@id/imageViewSongFive"
                 app:layout_constraintTop_toBottomOf="@id/textViewSongFive" />
 
-
             <TextView
                 android:id="@+id/topArtists"
                 android:gravity="center"
@@ -272,7 +284,8 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="20dp"
-                app:layout_constraintLeft_toLeftOf="@id/imageViewSongOne"
+                android:layout_marginLeft="20dp"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/topArtists"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
@@ -318,14 +331,15 @@
                 android:id="@+id/artistImageThree"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginLeft="36dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
                 app:layout_constraintLeft_toRightOf="@id/artistImageTwo"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/topArtists"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
             <TextView
-                android:id="@+id/textImageThree"
+                android:id="@+id/artistTextThree"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -350,7 +364,7 @@
                 android:layout_marginLeft="0dp"
                 app:layout_constraintStart_toStartOf="@id/topArtists"
                 app:layout_constraintEnd_toEndOf="@id/topArtists"
-                app:layout_constraintTop_toBottomOf="@id/textImageThree" />
+                app:layout_constraintTop_toBottomOf="@id/artistTextThree" />
 
             <TextView
                 android:id="@+id/genreTextOne"
@@ -420,6 +434,8 @@
 
             <TextView
                 android:id="@+id/recommendationTextOne"
+                android:gravity="center"
+                android:singleLine="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -429,28 +445,6 @@
                 app:layout_constraintStart_toStartOf="@id/artistImageOne"
                 app:layout_constraintEnd_toEndOf="@id/artistImageOne"
                 app:layout_constraintTop_toBottomOf="@id/recommendationImageOne" />
-
-            <ImageView
-                android:id="@+id/recommendationImageThree"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="@id/artistImageThree"
-                app:layout_constraintEnd_toEndOf="@id/artistImageThree"
-                app:layout_constraintTop_toBottomOf="@id/recommendations"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-            <TextView
-                android:id="@+id/recommendationTextThree"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="20dp"
-                android:textColor="?android:textColorPrimary"
-                app:layout_constraintStart_toStartOf="@id/artistImageThree"
-                app:layout_constraintEnd_toEndOf="@id/artistImageThree"
-                app:layout_constraintTop_toBottomOf="@id/recommendationImageThree" />
 
             <ImageView
                 android:id="@+id/recommendationImageTwo"
@@ -464,6 +458,8 @@
 
             <TextView
                 android:id="@+id/recommendationTextTwo"
+                android:gravity="center"
+                android:singleLine="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -473,6 +469,30 @@
                 app:layout_constraintStart_toStartOf="@id/artistImageTwo"
                 app:layout_constraintEnd_toEndOf="@id/artistImageTwo"
                 app:layout_constraintTop_toBottomOf="@id/recommendationImageTwo" />
+
+            <ImageView
+                android:id="@+id/recommendationImageThree"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@id/artistImageThree"
+                app:layout_constraintEnd_toEndOf="@id/artistImageThree"
+                app:layout_constraintTop_toBottomOf="@id/recommendations"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/recommendationTextThree"
+                android:gravity="center"
+                android:singleLine="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="20dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintStart_toStartOf="@id/artistImageThree"
+                app:layout_constraintEnd_toEndOf="@id/artistImageThree"
+                app:layout_constraintTop_toBottomOf="@id/recommendationImageThree" />
 
             <TextView
                 android:id="@+id/TextViewAI"
