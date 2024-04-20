@@ -11,6 +11,7 @@
     tools:context=".firebaseLogin.Registration">
 
     <TextView
+        android:textColor="?android:textColorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Update Wrappedify Account"
@@ -20,6 +21,7 @@
         android:layout_marginBottom="20dp"/>
 
     <TextView
+        android:textColor="?android:textColorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
@@ -64,6 +66,7 @@
         android:text="Send Reset Email"/>
 
     <TextView
+        android:textColor="?android:textColorPrimary"
         android:id="@+id/registerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

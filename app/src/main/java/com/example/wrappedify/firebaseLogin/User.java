@@ -22,6 +22,8 @@ public class User {
     public static String displayName;
     public static String generatedTerm;
 
+    public static boolean privateAcc = false;
+
     public static String getAccessToken() {
         return accessToken;
     }
@@ -80,6 +82,14 @@ public class User {
 
     public static void setGeneratedTerm(String generatedTerm) {
         User.generatedTerm = generatedTerm;
+    }
+
+    public static boolean isPrivateAcc() {
+        return privateAcc;
+    }
+
+    public static void setPrivateAcc(boolean privateAcc) {
+        User.privateAcc = privateAcc;
     }
 
     public static DocumentReference currentUserDetails(){
