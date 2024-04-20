@@ -43,13 +43,13 @@ public class informationFetcher {
     }
 
     public static String genresText(ArrayList<String> mode) {
-        String output = "Top Genres: ";
+        String output = "";
 
         for (int i = 0; i < mode.size(); i++) {
-            output += mode.get(i) + ", ";
+            output += mode.get(i) + "       ";
         }
 
-        return output.substring(0, output.length() - 2);
+        return output.substring(0, output.length() - 1);
     }
 
     public static String namesText(ArrayList<String> names) {
