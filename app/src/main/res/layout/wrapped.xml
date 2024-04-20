@@ -47,18 +47,12 @@
         app:layout_constraintVertical_bias="0.0"
         android:fillViewport="true">
 
-
-
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/root_content2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             style="@style/backgroundColor"
-
             >
-
-
 
             <TextView
                 android:id="@+id/wrappedTitle"
@@ -479,8 +473,6 @@
                 app:layout_constraintStart_toStartOf="@id/artistImageTwo"
                 app:layout_constraintEnd_toEndOf="@id/artistImageTwo"
                 app:layout_constraintTop_toBottomOf="@id/recommendationImageTwo" />
-
-
 
             <TextView
                 android:id="@+id/TextViewAI"
