@@ -45,6 +45,7 @@ import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 import com.squareup.picasso.Picasso;
 
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -134,11 +135,11 @@ public class generateWrapped extends AppCompatActivity {
 
         menuFab = findViewById(R.id.menuFab);
         shortTermFab = findViewById(R.id.short_term_fab);
-        shortTermFab.setImageBitmap(textAsBitmap("Short", 40, Color.WHITE));
+        shortTermFab.setImageBitmap(textAsBitmap("Week", 40, Color.WHITE));
         mediumTermFab = findViewById(R.id.medium_term_fab);
-        mediumTermFab.setImageBitmap(textAsBitmap("Med", 40, Color.WHITE));
+        mediumTermFab.setImageBitmap(textAsBitmap("Month", 40, Color.WHITE));
         longTermFab = findViewById(R.id.long_term_fab);
-        longTermFab.setImageBitmap(textAsBitmap("Long", 40, Color.WHITE));
+        longTermFab.setImageBitmap(textAsBitmap("Year", 40, Color.WHITE));
 
         themesFab = findViewById(R.id.themesFab);
 
@@ -542,6 +543,7 @@ public class generateWrapped extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
+                    ArrayList<String> recommendedUrl = new ArrayList<>();
                     String output = "Recommended Songs: \n";
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray trackList = jsonObject.getJSONArray("tracks");
@@ -552,6 +554,10 @@ public class generateWrapped extends AppCompatActivity {
                         ArrayList<String> artistNames = new ArrayList<>();
                         JSONObject trackInfo = trackList.getJSONObject(i);
                         JSONArray artistInfo = trackInfo.getJSONArray("artists");
+
+                        JSONObject albumInfo = trackInfo.getJSONObject("album");
+                        JSONArray imageInfo = albumInfo.getJSONArray("images");
+                        recommendedUrl.add(imageInfo.getJSONObject(0).getString("url"));
 
                         for (int j = 0; j < artistInfo.length(); j++) {
                             JSONObject artist = artistInfo.getJSONObject(j);
@@ -653,6 +659,9 @@ public class generateWrapped extends AppCompatActivity {
             FileOutputStream out = new FileOutputStream(file);
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             uploadImage();
+            if (!User.isPrivateAcc()) {
+                uploadImagePublic();
+            }
             out.flush();
             out.close();
 
@@ -699,6 +708,42 @@ public class generateWrapped extends AppCompatActivity {
                                 WrappedFeed wrappedFeed = new WrappedFeed(User.getProfileImage(), generatedFilePath, User.getDisplayName() + ": " + titleName, User.getGeneratedTerm(), timeName);
 
                                 firebaseFirestore.collection(user.getUid()).document(fileName).set(wrappedFeed);
+                            }
+                        });
+                    }
+                });
+    }
+
+    private void uploadImagePublic() {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy__MM__dd_HH_mm_ss", Locale.ENGLISH);
+        SimpleDateFormat titleBuild = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+        SimpleDateFormat timeStamp = new SimpleDateFormat("yyyy,MM,dd,HH,mm,ss");
+        Date date = new Date();
+        Date date2 = new Date();
+        Date date3 = new Date();
+        String fileName = formatter.format(date);
+        String titleName = titleBuild.format(date2);
+        String timeName = timeStamp.format(date3);
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        storageRef = FirebaseStorage.getInstance().getReference("Public Storage/" + fileName);
+
+        storageRef.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
+
+                        downloadUri.addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+
+                                String generatedFilePath = downloadUri.getResult().toString();
+
+                                WrappedFeed wrappedFeed = new WrappedFeed(User.getProfileImage(), generatedFilePath, User.getDisplayName() + ": " + titleName, User.getGeneratedTerm(), timeName);
+
+                                firebaseFirestore.collection("Public Storage").document(fileName).set(wrappedFeed);
                             }
                         });
                     }

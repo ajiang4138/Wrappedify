@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -48,7 +49,9 @@ public class Settings extends AppCompatActivity {
     UserModel currentUserModel;
 
     private static final String NIGHT_MODE = "night_mode";
+    private static final String PRIVATE_MODE = "private_mode";
     private SwitchCompat nightModeSwitch;
+    private SwitchCompat privateToggle;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -98,6 +101,20 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        // Private Account
+        privateToggle = findViewById(R.id.privateToggle);
+        sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
+
+        privateToggle.setChecked(sharedPreferences.getBoolean(PRIVATE_MODE, false));
+
+        privateToggle.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(PRIVATE_MODE, isChecked);
+            editor.apply();
+
+            User.setPrivateAcc(isChecked);
+        }));
+
         username.setText(user.getEmail());
 
         // User Model setup
@@ -119,6 +136,8 @@ public class Settings extends AppCompatActivity {
                             updateToFirestore();
                         });
             }
+            Intent intent = new Intent(getApplicationContext(), dashboard.class);
+            startActivity(intent);
             finish();
         });
 
