@@ -102,6 +102,8 @@ public class generateWrapped extends AppCompatActivity {
     float translationYaxis = 100f;
     OvershootInterpolator interpolator = new OvershootInterpolator();
 
+    ProgressBar progressBar;
+
     FirebaseAuth mAuth;
     FirebaseUser user;
     FirebaseFirestore firebaseFirestore;
@@ -175,7 +177,7 @@ public class generateWrapped extends AppCompatActivity {
         showMenu();
         showThemeMenu();
 
-        ProgressBar progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
 
         defaultFab.setOnClickListener((v) -> {
@@ -218,9 +220,6 @@ public class generateWrapped extends AppCompatActivity {
 
 
         shortTermFab.setOnClickListener((v) -> {
-            progressBar.setVisibility(View.VISIBLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
             onGetUserProfileClicked();
 
@@ -230,7 +229,7 @@ public class generateWrapped extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
 
-            User.setGeneratedTerm("Short Term");
+            User.setGeneratedTerm("Weekly");
             getTopArtist("short");
 
             try {
@@ -248,15 +247,10 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getRecommendations();
-
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            progressBar.setVisibility(View.GONE);
+            closeMenu();
         });
 
         mediumTermFab.setOnClickListener((v) -> {
-            progressBar.setVisibility(View.VISIBLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
             onGetUserProfileClicked();
 
@@ -266,7 +260,7 @@ public class generateWrapped extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
 
-            User.setGeneratedTerm("Medium Term");
+            User.setGeneratedTerm("Monthly");
             getTopArtist("medium");
 
             try {
@@ -284,15 +278,10 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getRecommendations();
-
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            progressBar.setVisibility(View.GONE);
+            closeMenu();
         });
 
         longTermFab.setOnClickListener((v) -> {
-            progressBar.setVisibility(View.VISIBLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
             onGetUserProfileClicked();
 
@@ -302,7 +291,7 @@ public class generateWrapped extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
 
-            User.setGeneratedTerm("Long Term");
+            User.setGeneratedTerm("Yearly");
             getTopArtist("long");
 
             try {
@@ -320,9 +309,7 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getRecommendations();
-
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            progressBar.setVisibility(View.GONE);
+            closeMenu();
         });
     }
 
@@ -941,6 +928,7 @@ public class generateWrapped extends AppCompatActivity {
     }
 
     private void openMenu() {
+        progressBar.setVisibility(View.VISIBLE);
         menuOpen = !menuOpen;
         shortTermFab.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
         mediumTermFab.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
@@ -948,6 +936,7 @@ public class generateWrapped extends AppCompatActivity {
     }
 
     private void closeMenu() {
+        progressBar.setVisibility(View.INVISIBLE);
         menuOpen = !menuOpen;
         shortTermFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
         mediumTermFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
