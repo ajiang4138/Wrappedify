@@ -16,9 +16,12 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -75,14 +78,22 @@ public class generateWrapped extends AppCompatActivity {
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
     private Call mCall;
 
-    // Initialize views
-    private ConstraintLayout rootContent, backgroundContent;
-    private TextView textViewSong1, textViewSong2, textViewSong3, textViewGenres, textViewAi, textViewRecommendation;
-    private TextView textViewArtist1, textViewArtist2, textViewArtist3, topFiveArtists;
-    private ImageView imageView1, imageView2, imageView3, artistView, generateImageView;
+    // Saving Image
+    private ConstraintLayout rootContent;
+
+    // Top Track views
+    private TextView textViewSong1, textViewSong2, textViewSong3, textViewSong4, textViewSong5, textViewGenres;
+    private ImageView imageView1, imageView2, imageView3, imageView4, imageView5, generateImageView;
+
+    // Top Artist views
+    private TextView topArtist1, topArtist2, topArtist3;
+    private ImageView artistImage1, artistImage2, artistImage3;
+
+    // Recommendations
+    private TextView textViewRecommendation, recText1, recText2, recText3;
+    private ImageView recImage1, recImage2, recImage3;
 
     // Initialize buttons
-    private Button backBtn, saveBtn;
     private FloatingActionButton menuFab, shortTermFab, mediumTermFab, longTermFab;
     private FloatingActionButton themesFab, defaultFab, christmasFab, halloweenFab, newyearsFab, stpatFab, valentinesFab;
 
@@ -90,6 +101,8 @@ public class generateWrapped extends AppCompatActivity {
     boolean themeOpen = false;
     float translationYaxis = 100f;
     OvershootInterpolator interpolator = new OvershootInterpolator();
+
+    ProgressBar progressBar;
 
     FirebaseAuth mAuth;
     FirebaseUser user;
@@ -104,36 +117,49 @@ public class generateWrapped extends AppCompatActivity {
         setContentView(R.layout.wrapped);
 
         // Set views
-        backgroundContent = findViewById(R.id.root_content);
+        ConstraintLayout backgroundContent = findViewById(R.id.root_content);
         rootContent = findViewById(R.id.root_content2);
 
         textViewSong1 = findViewById(R.id.textViewSongOne);
         textViewSong2 = findViewById(R.id.textViewSongTwo);
         textViewSong3 = findViewById(R.id.textViewSongThree);
+        textViewSong4 = findViewById(R.id.textViewSongFour);
+        textViewSong5 = findViewById(R.id.textViewSongFive);
 
-        textViewArtist1 = findViewById(R.id.textViewArtistOne);
-        textViewArtist2 = findViewById(R.id.textViewArtistTwo);
-        textViewArtist3 = findViewById(R.id.textViewArtistThree);
+        topArtist1 = findViewById(R.id.artistTextOne);
+        topArtist2 = findViewById(R.id.artistTextTwo);
+        topArtist3 = findViewById(R.id.artistTextThree);
 
-        topFiveArtists = findViewById(R.id.topFiveArtists);
+        recText1 = findViewById(R.id.recommendationTextOne);
+        recText2 = findViewById(R.id.recommendationTextTwo);
+        recText3 = findViewById(R.id.recommendationTextThree);
 
-        textViewGenres = findViewById(R.id.TextViewGenres);
+        textViewGenres = findViewById(R.id.genreTextTwo);
 
-        textViewAi = findViewById(R.id.TextViewAI);
-        textViewRecommendation = findViewById(R.id.TextViewRecommendations);
+        textViewRecommendation = findViewById(R.id.recommendations);
 
         imageView1 = findViewById(R.id.imageViewSongOne);
         imageView2 = findViewById(R.id.imageViewSongTwo);
         imageView3 = findViewById(R.id.imageViewSongThree);
-        artistView = findViewById(R.id.artistImage);
+        imageView4 = findViewById(R.id.imageViewSongFour);
+        imageView5 = findViewById(R.id.imageViewSongFive);
+
+        artistImage1 = findViewById(R.id.artistImageOne);
+        artistImage2 = findViewById(R.id.artistImageTwo);
+        artistImage3 = findViewById(R.id.artistImageThree);
+
+        recImage1 = findViewById(R.id.recommendationImageOne);
+        recImage2 = findViewById(R.id.recommendationImageTwo);
+        recImage3 = findViewById(R.id.recommendationImageThree);
 
         generateImageView = findViewById(R.id.generateImageView);
 
         // Set buttons
-        backBtn = findViewById(R.id.backBtn);
-        saveBtn = findViewById(R.id.saveBtn);
+        Button backBtn = findViewById(R.id.backBtn);
+        Button saveBtn = findViewById(R.id.saveBtn);
 
         menuFab = findViewById(R.id.menuFab);
+
         shortTermFab = findViewById(R.id.short_term_fab);
         shortTermFab.setImageBitmap(textAsBitmap("Week", 40, Color.WHITE));
         mediumTermFab = findViewById(R.id.medium_term_fab);
@@ -150,6 +176,9 @@ public class generateWrapped extends AppCompatActivity {
 
         showMenu();
         showThemeMenu();
+
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
 
         defaultFab.setOnClickListener((v) -> {
             rootContent.setBackgroundResource(0);
@@ -191,6 +220,7 @@ public class generateWrapped extends AppCompatActivity {
 
 
         shortTermFab.setOnClickListener((v) -> {
+
             onGetUserProfileClicked();
 
             try {
@@ -199,7 +229,7 @@ public class generateWrapped extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
 
-            User.setGeneratedTerm("Short Term");
+            User.setGeneratedTerm("Weekly");
             getTopArtist("short");
 
             try {
@@ -217,9 +247,11 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getRecommendations();
+            closeMenu();
         });
 
         mediumTermFab.setOnClickListener((v) -> {
+
             onGetUserProfileClicked();
 
             try {
@@ -228,7 +260,7 @@ public class generateWrapped extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
 
-            User.setGeneratedTerm("Medium Term");
+            User.setGeneratedTerm("Monthly");
             getTopArtist("medium");
 
             try {
@@ -246,9 +278,11 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getRecommendations();
+            closeMenu();
         });
 
         longTermFab.setOnClickListener((v) -> {
+
             onGetUserProfileClicked();
 
             try {
@@ -257,7 +291,7 @@ public class generateWrapped extends AppCompatActivity {
                 Thread.currentThread().interrupt();
             }
 
-            User.setGeneratedTerm("Long Term");
+            User.setGeneratedTerm("Yearly");
             getTopArtist("long");
 
             try {
@@ -275,6 +309,7 @@ public class generateWrapped extends AppCompatActivity {
             }
 
             getRecommendations();
+            closeMenu();
         });
     }
 
@@ -326,11 +361,6 @@ public class generateWrapped extends AppCompatActivity {
                     JSONArray jsonItems = jsonObject.getJSONArray("items");
                     int length = jsonItems.length();
 
-                    JSONObject topArtist = jsonItems.getJSONObject(0);
-                    JSONArray artistImages = topArtist.getJSONArray("images");
-                    JSONObject artistImage = artistImages.getJSONObject(0);
-                    String imageURL = artistImage.getString("url");
-
                     ArrayList<String> names = new ArrayList<>();
                     ArrayList<String> artistId = new ArrayList<>();
                     ArrayList<String> genres = new ArrayList<>();
@@ -338,6 +368,11 @@ public class generateWrapped extends AppCompatActivity {
                     for (int i = 0; i < length; i++) {
                         JSONObject artistInfo = jsonItems.getJSONObject(i);
                         String name = artistInfo.getString("name");
+
+                        JSONObject topArtist = jsonItems.getJSONObject(i);
+                        JSONArray artistImages = topArtist.getJSONArray("images");
+                        JSONObject artistImage = artistImages.getJSONObject(0);
+                        String imageURL = artistImage.getString("url");
 
                         JSONArray genreList = artistInfo.getJSONArray("genres");
                         String[] genre = new String[genreList.length()];
@@ -348,30 +383,61 @@ public class generateWrapped extends AppCompatActivity {
                         artistId.add(artistInfo.getString("id"));
                         names.add(name);
                         genres.addAll(Arrays.asList(genre));
+
+                        if (i == 0) {
+                            setTextAsync(name, topArtist1);
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(artistImage1);
+                                }
+                            });
+                        }
+
+                        if (i == 1) {
+                            setTextAsync(name, topArtist2);
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(artistImage2);
+                                }
+                            });
+                        }
+
+                        if (i == 2) {
+                            setTextAsync(name, topArtist3);
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(artistImage3);
+                                }
+                            });
+                        }
                     }
 
                     User.setArtistId(artistId);
 
-                    // Setting Image
-                    Handler uiHandler = new Handler(Looper.getMainLooper());
-                    uiHandler.post(new Runnable(){
-                        @Override
-                        public void run() {
-                            Picasso.get()
-                                    .load(imageURL)
-                                    .resize(300, 300)
-                                    .centerCrop()
-                                    .into(artistView);
-                        }
-                    });
-
                     String output = informationFetcher.genresText(informationFetcher.top3Genre(genres));
 
                     setTextAsync(output, textViewGenres);
-
-                    output = informationFetcher.namesText(names);
-
-                    setTextAsync(output, topFiveArtists);
 
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -397,7 +463,7 @@ public class generateWrapped extends AppCompatActivity {
 
         // get request
         final Request request = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/tracks?time_range=" + term + "_term&limit=3&offset=0")
+                .url("https://api.spotify.com/v1/me/top/tracks?time_range=" + term + "_term&limit=5&offset=0")
                 .addHeader("Authorization", "Bearer " + User.getAccessToken())
                 .build();
 
@@ -490,6 +556,40 @@ public class generateWrapped extends AppCompatActivity {
                                 }
                             });
                         }
+
+                        if (i == 3) {
+                            setTextAsync(name + "\n" + artists, textViewSong4);
+
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(imageView4);
+                                }
+                            });
+                        }
+
+                        if (i == 4) {
+                            setTextAsync(name + "\n" + artists, textViewSong5);
+
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(imageView5);
+                                }
+                            });
+                        }
                     }
 
                     User.setTrackId(trackId);
@@ -543,8 +643,6 @@ public class generateWrapped extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    ArrayList<String> recommendedUrl = new ArrayList<>();
-                    String output = "Recommended Songs: \n";
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray trackList = jsonObject.getJSONArray("tracks");
 
@@ -557,17 +655,66 @@ public class generateWrapped extends AppCompatActivity {
 
                         JSONObject albumInfo = trackInfo.getJSONObject("album");
                         JSONArray imageInfo = albumInfo.getJSONArray("images");
-                        recommendedUrl.add(imageInfo.getJSONObject(0).getString("url"));
+                        String imageURL = (imageInfo.getJSONObject(0).getString("url"));
 
                         for (int j = 0; j < artistInfo.length(); j++) {
                             JSONObject artist = artistInfo.getJSONObject(j);
                             artistNames.add(artist.getString("name"));
                         }
 
-                        output += trackInfo.getString("name") + " by " + informationFetcher.artistText(artistNames) + "\n";
-                    }
+                        String output = trackInfo.getString("name") + "\n" + artistNames.get(0);
 
-                    setTextAsync(output, textViewRecommendation);
+                        if (i == 0) {
+                            setTextAsync(output, recText1);
+
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(recImage1);
+                                }
+                            });
+                        }
+
+                        if (i == 1) {
+                            setTextAsync(output, recText2);
+
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(recImage2);
+                                }
+                            });
+                        }
+
+                        if (i == 2) {
+                            setTextAsync(output, recText3);
+
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(recImage3);
+                                }
+                            });
+                        }
+                    }
 
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -781,6 +928,7 @@ public class generateWrapped extends AppCompatActivity {
     }
 
     private void openMenu() {
+        progressBar.setVisibility(View.VISIBLE);
         menuOpen = !menuOpen;
         shortTermFab.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
         mediumTermFab.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
@@ -788,6 +936,7 @@ public class generateWrapped extends AppCompatActivity {
     }
 
     private void closeMenu() {
+        progressBar.setVisibility(View.INVISIBLE);
         menuOpen = !menuOpen;
         shortTermFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
         mediumTermFab.animate().translationY(translationYaxis).alpha(0f).setInterpolator(interpolator).setDuration(300).start();
