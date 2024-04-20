@@ -45,7 +45,7 @@
         android:indeterminateTint="#1a09d6"
         android:layout_marginTop="-7dp"/>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,6 +58,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintVertical_bias="0.0"
+        android:paddingBottom="150dp"
         android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -350,6 +351,73 @@
                 app:layout_constraintEnd_toEndOf="@id/artistImageThree"
                 app:layout_constraintTop_toBottomOf="@id/artistImageThree" />
 
+            <ImageView
+                android:id="@+id/artistImageFour"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+
+                app:layout_constraintStart_toStartOf="@id/artistImageOne"
+                app:layout_constraintEnd_toEndOf="@id/artistImageOne"
+                app:layout_constraintTop_toBottomOf="@id/artistTextOne"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/artistTextFour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="20dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintStart_toStartOf="@id/artistImageOne"
+                app:layout_constraintEnd_toEndOf="@id/artistImageOne"
+                app:layout_constraintTop_toBottomOf="@id/artistImageFour" />
+
+            <ImageView
+                android:id="@+id/artistImageFive"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@id/artistImageTwo"
+                app:layout_constraintEnd_toEndOf="@id/artistImageTwo"
+                app:layout_constraintTop_toBottomOf="@id/artistTextTwo"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/artistTextFive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="20dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintStart_toStartOf="@id/artistImageTwo"
+                app:layout_constraintEnd_toEndOf="@id/artistImageTwo"
+                app:layout_constraintTop_toBottomOf="@id/artistImageFive" />
+
+            <ImageView
+                android:id="@+id/artistImageSix"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@id/artistImageThree"
+                app:layout_constraintEnd_toEndOf="@id/artistImageThree"
+                app:layout_constraintTop_toBottomOf="@id/artistTextThree"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/artistTextSix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="20dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintStart_toStartOf="@id/artistImageThree"
+                app:layout_constraintEnd_toEndOf="@id/artistImageThree"
+                app:layout_constraintTop_toBottomOf="@id/artistImageSix" />
+
             <TextView
                 android:id="@+id/topGenres"
                 android:gravity="center"
@@ -364,7 +432,7 @@
                 android:layout_marginLeft="0dp"
                 app:layout_constraintStart_toStartOf="@id/topArtists"
                 app:layout_constraintEnd_toEndOf="@id/topArtists"
-                app:layout_constraintTop_toBottomOf="@id/artistTextThree" />
+                app:layout_constraintTop_toBottomOf="@id/artistTextSix" />
 
             <TextView
                 android:id="@+id/genreTextOne"
@@ -373,12 +441,12 @@
                 android:layout_margin="10dp"
                 android:layout_marginLeft="0dp"
                 android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:textSize="20dp"
                 android:textColor="?android:textColorPrimary"
                 app:layout_constraintStart_toStartOf="@id/artistImageOne"
                 app:layout_constraintEnd_toEndOf="@id/artistImageOne"
                 app:layout_constraintTop_toBottomOf="@id/topGenres" />
-
-
 
             <TextView
                 android:id="@+id/genreTextTwo"
@@ -388,6 +456,7 @@
                 android:layout_marginLeft="0dp"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
+                android:textSize="30dp"
                 android:textColor="?android:textColorPrimary"
                 app:layout_constraintStart_toStartOf="@id/artistImageTwo"
                 app:layout_constraintEnd_toEndOf="@id/artistImageTwo"
@@ -395,12 +464,14 @@
 
 
             <TextView
-                android:id="@+id/textGenreThree"
+                android:id="@+id/genreTextThree"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:textSize="15dp"
                 android:textColor="?android:textColorPrimary"
                 app:layout_constraintStart_toStartOf="@id/artistImageThree"
                 app:layout_constraintEnd_toEndOf="@id/artistImageThree"
@@ -419,7 +490,7 @@
                 android:textSize="24dp"
                 app:layout_constraintStart_toStartOf="@id/topGenres"
                 app:layout_constraintEnd_toEndOf="@id/topGenres"
-                app:layout_constraintTop_toBottomOf="@id/textGenreThree" />
+                app:layout_constraintTop_toBottomOf="@id/genreTextThree" />
 
 
             <ImageView
@@ -494,22 +565,83 @@
                 app:layout_constraintEnd_toEndOf="@id/artistImageThree"
                 app:layout_constraintTop_toBottomOf="@id/recommendationImageThree" />
 
+            <ImageView
+                android:id="@+id/recommendationImageFour"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@id/artistImageOne"
+                app:layout_constraintEnd_toEndOf="@id/artistImageOne"
+                app:layout_constraintTop_toBottomOf="@id/recommendationTextOne"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
             <TextView
-                android:id="@+id/TextViewAI"
+                android:id="@+id/recommendationTextFour"
+                android:gravity="center"
+                android:singleLine="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
-                android:layout_marginBottom="70dp"
-                android:text=""
+                android:layout_margin="10dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="20dp"
                 android:textColor="?android:textColorPrimary"
-                app:layout_constraintLeft_toLeftOf="@id/recommendationImageOne"
+                app:layout_constraintStart_toStartOf="@id/artistImageOne"
+                app:layout_constraintEnd_toEndOf="@id/artistImageOne"
+                app:layout_constraintTop_toBottomOf="@id/recommendationImageFour" />
+
+            <ImageView
+                android:id="@+id/recommendationImageFive"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@id/artistImageTwo"
+                app:layout_constraintEnd_toEndOf="@id/artistImageTwo"
                 app:layout_constraintTop_toBottomOf="@id/recommendationTextTwo"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/recommendationTextFive"
+                android:gravity="center"
+                android:singleLine="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="20dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintStart_toStartOf="@id/artistImageTwo"
+                app:layout_constraintEnd_toEndOf="@id/artistImageTwo"
+                app:layout_constraintTop_toBottomOf="@id/recommendationImageFive" />
+
+            <ImageView
+                android:id="@+id/recommendationImageSix"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@id/artistImageThree"
+                app:layout_constraintEnd_toEndOf="@id/artistImageThree"
+                app:layout_constraintTop_toBottomOf="@id/recommendationTextThree"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/recommendationTextSix"
+                android:gravity="center"
+                android:singleLine="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="20dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintStart_toStartOf="@id/artistImageThree"
+                app:layout_constraintEnd_toEndOf="@id/artistImageThree"
+                app:layout_constraintTop_toBottomOf="@id/recommendationImageSix" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <ImageView
         android:id="@+id/generateImageView"

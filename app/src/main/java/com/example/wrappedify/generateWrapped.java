@@ -82,16 +82,19 @@ public class generateWrapped extends AppCompatActivity {
     private ConstraintLayout rootContent;
 
     // Top Track views
-    private TextView textViewSong1, textViewSong2, textViewSong3, textViewSong4, textViewSong5, textViewGenres;
+    private TextView textViewSong1, textViewSong2, textViewSong3, textViewSong4, textViewSong5;
     private ImageView imageView1, imageView2, imageView3, imageView4, imageView5, generateImageView;
 
     // Top Artist views
-    private TextView topArtist1, topArtist2, topArtist3;
-    private ImageView artistImage1, artistImage2, artistImage3;
+    private TextView topArtist1, topArtist2, topArtist3, topArtist4, topArtist5, topArtist6;
+    private ImageView artistImage1, artistImage2, artistImage3, artistImage4, artistImage5, artistImage6;
 
     // Recommendations
-    private TextView textViewRecommendation, recText1, recText2, recText3;
-    private ImageView recImage1, recImage2, recImage3;
+    private TextView textViewRecommendation, recText1, recText2, recText3, recText4, recText5, recText6;
+    private ImageView recImage1, recImage2, recImage3, recImage4, recImage5, recImage6;
+
+    // Top Genre Views
+    private TextView genre1, genre2, genre3;
 
     // Initialize buttons
     private FloatingActionButton menuFab, shortTermFab, mediumTermFab, longTermFab;
@@ -129,12 +132,20 @@ public class generateWrapped extends AppCompatActivity {
         topArtist1 = findViewById(R.id.artistTextOne);
         topArtist2 = findViewById(R.id.artistTextTwo);
         topArtist3 = findViewById(R.id.artistTextThree);
+        topArtist4 = findViewById(R.id.artistTextFour);
+        topArtist5 = findViewById(R.id.artistTextFive);
+        topArtist6 = findViewById(R.id.artistTextSix);
 
         recText1 = findViewById(R.id.recommendationTextOne);
         recText2 = findViewById(R.id.recommendationTextTwo);
         recText3 = findViewById(R.id.recommendationTextThree);
+        recText4 = findViewById(R.id.recommendationTextFour);
+        recText5 = findViewById(R.id.recommendationTextFive);
+        recText6 = findViewById(R.id.recommendationTextSix);
 
-        textViewGenres = findViewById(R.id.genreTextTwo);
+        genre1 = findViewById(R.id.genreTextOne);
+        genre2 = findViewById(R.id.genreTextTwo);
+        genre3 = findViewById(R.id.genreTextThree);
 
         textViewRecommendation = findViewById(R.id.recommendations);
 
@@ -147,10 +158,16 @@ public class generateWrapped extends AppCompatActivity {
         artistImage1 = findViewById(R.id.artistImageOne);
         artistImage2 = findViewById(R.id.artistImageTwo);
         artistImage3 = findViewById(R.id.artistImageThree);
+        artistImage4 = findViewById(R.id.artistImageFour);
+        artistImage5 = findViewById(R.id.artistImageFive);
+        artistImage6 = findViewById(R.id.artistImageSix);
 
         recImage1 = findViewById(R.id.recommendationImageOne);
         recImage2 = findViewById(R.id.recommendationImageTwo);
         recImage3 = findViewById(R.id.recommendationImageThree);
+        recImage4 = findViewById(R.id.recommendationImageFour);
+        recImage5 = findViewById(R.id.recommendationImageFive);
+        recImage6 = findViewById(R.id.recommendationImageSix);
 
         generateImageView = findViewById(R.id.generateImageView);
 
@@ -401,6 +418,22 @@ public class generateWrapped extends AppCompatActivity {
                         }
 
                         if (i == 1) {
+                            setTextAsync(name, topArtist3);
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(artistImage3);
+                                }
+                            });
+                        }
+
+                        if (i == 2) {
                             setTextAsync(name, topArtist2);
                             // Setting Image
                             Handler uiHandler = new Handler(Looper.getMainLooper());
@@ -416,8 +449,8 @@ public class generateWrapped extends AppCompatActivity {
                             });
                         }
 
-                        if (i == 2) {
-                            setTextAsync(name, topArtist3);
+                        if (i == 3) {
+                            setTextAsync(name, topArtist4);
                             // Setting Image
                             Handler uiHandler = new Handler(Looper.getMainLooper());
                             uiHandler.post(new Runnable(){
@@ -427,7 +460,39 @@ public class generateWrapped extends AppCompatActivity {
                                             .load(imageURL)
                                             .resize(300, 300)
                                             .centerCrop()
-                                            .into(artistImage3);
+                                            .into(artistImage4);
+                                }
+                            });
+                        }
+
+                        if (i == 4) {
+                            setTextAsync(name, topArtist6);
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(artistImage6);
+                                }
+                            });
+                        }
+
+                        if (i == 5) {
+                            setTextAsync(name, topArtist5);
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(artistImage5);
                                 }
                             });
                         }
@@ -435,9 +500,22 @@ public class generateWrapped extends AppCompatActivity {
 
                     User.setArtistId(artistId);
 
-                    String output = informationFetcher.genresText(informationFetcher.top3Genre(genres));
+                    ArrayList<String> mode = informationFetcher.top3Genre(genres);
 
-                    setTextAsync(output, textViewGenres);
+                    for (int i = 0; i < mode.size(); i++) {
+                        if (i == 0) {
+                            setTextAsync(mode.get(i), genre2);
+                        }
+
+                        if (i == 1) {
+                            setTextAsync(mode.get(i), genre1);
+                        }
+
+                        if (i == 2) {
+                            setTextAsync(mode.get(i), genre3);
+                        }
+                    }
+
 
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -620,7 +698,7 @@ public class generateWrapped extends AppCompatActivity {
         String genreUrl = informationFetcher.genreUrl(User.getGenres());
 
         String url =
-                "https://api.spotify.com/v1/recommendations?limit=3&seed_artists=" + artistIdUrl
+                "https://api.spotify.com/v1/recommendations?limit=6&seed_artists=" + artistIdUrl
                             + "&seed_genres=" + genreUrl;
 
         // get request
@@ -662,7 +740,13 @@ public class generateWrapped extends AppCompatActivity {
                             artistNames.add(artist.getString("name"));
                         }
 
-                        String output = trackInfo.getString("name") + "\n" + artistNames.get(0);
+                        String name = trackInfo.getString("name");
+
+                        if (name.contains("(")) {
+                            name = name.substring(0, name.indexOf("(") - 1);
+                        }
+
+                        String output = name + "\n" + artistNames.get(0);
 
                         if (i == 0) {
                             setTextAsync(output, recText1);
@@ -711,6 +795,57 @@ public class generateWrapped extends AppCompatActivity {
                                             .resize(300, 300)
                                             .centerCrop()
                                             .into(recImage3);
+                                }
+                            });
+                        }
+
+                        if (i == 3) {
+                            setTextAsync(output, recText4);
+
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(recImage4);
+                                }
+                            });
+                        }
+
+                        if (i == 4) {
+                            setTextAsync(output, recText5);
+
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(recImage5);
+                                }
+                            });
+                        }
+
+                        if (i == 5) {
+                            setTextAsync(output, recText6);
+
+                            // Setting Image
+                            Handler uiHandler = new Handler(Looper.getMainLooper());
+                            uiHandler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    Picasso.get()
+                                            .load(imageURL)
+                                            .resize(300, 300)
+                                            .centerCrop()
+                                            .into(recImage6);
                                 }
                             });
                         }
